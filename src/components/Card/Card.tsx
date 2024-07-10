@@ -1,3 +1,4 @@
+import { BASE_IMAGE_URL } from '../../constants/constants';
 import { CardProps } from '../../types/types';
 import styles from './Card.module.css'
 
@@ -7,7 +8,7 @@ const Card: React.FC<CardProps> = ({pokemon, id}) => {
     <div className={styles.cardName}>
       <p>Name:</p>
       <p className={styles.pokemonName}>{pokemon}</p>
-      <img src={'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+ id +'.png'} alt="" />
+      <img src={BASE_IMAGE_URL+ id +'.png'} alt="" />
     </div>
   )
 }
