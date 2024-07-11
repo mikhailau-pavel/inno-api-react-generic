@@ -59,7 +59,7 @@ const Pagination: React.FC<PaginationProps> = () => {
           <Card pokemon={el.name} id={el.url.slice(34)} />
         ))}
       </div>
-      {isLoading ? <Loader /> : <Loader />}
+      {isLoading && <Loader />}
     </div>
   );
 };
