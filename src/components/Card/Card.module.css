@@ -1,6 +1,10 @@
-.cardName {
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: 1px solid black;
 }
 .pokemonName{
-  border: 1px solid yellowgreen;
+  font-weight: 700;
+  border-bottom: 5px solid yellowgreen;
 }

@@ -1,0 +1,9 @@
+.loaderContainer {
+  position: fixed;
+  top: 50%;
+  left: 10%;
+}
+.loaderText {
+  color: aliceblue;
+  background-color: black;
+}

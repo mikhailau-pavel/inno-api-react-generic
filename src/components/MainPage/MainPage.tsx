@@ -2,9 +2,9 @@ import Pagination from '../Pagination/Pagination';
 
 const MainPage: React.FC = () => {
   return (
-    <div className='mainPageWrapper'>
+    <div className="mainPageWrapper">
       <h1>Welcome to Pokemon Center</h1>
-      <Pagination/>
+      <Pagination />
     </div>
   );
 };
