@@ -21,9 +21,9 @@ const Pagination: React.FC<PaginationProps> = () => {
   }, []);
 
   const fetchData = useCallback(async () => {
-    if (isLoading) return
+    if (isLoading) return;
     setIsLoading(true);
-    axios
+    await axios
       .get(`${BASE_URL}?offset=${index}0&limit=10`)
       .then((response) => {
         const data: Pokemon[] = response.data.results;
@@ -47,9 +47,7 @@ const Pagination: React.FC<PaginationProps> = () => {
   }, [fetchData]);
 
   return (
-    <div
-      className={styles.paginationWrapper}
-    >
+    <div className={styles.paginationWrapper}>
       <div className={styles.mainFlow}>
         {pokemonList.map((el: Pokemon) => (
           <Card pokemon={el.name} id={el.url.slice(34)} />
