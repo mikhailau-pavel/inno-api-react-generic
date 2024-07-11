@@ -49,7 +49,6 @@ const Pagination: React.FC<PaginationProps> = () => {
   return (
     <div
       className={styles.paginationWrapper}
-      style={{ backgroundColor: 'pink' }}
     >
       <div className={styles.mainFlow}>
         {pokemonList.map((el: Pokemon) => (
