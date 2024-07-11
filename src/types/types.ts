@@ -6,8 +6,6 @@ interface CardProps extends PropsWithChildren {
 }
 
 interface PaginationProps extends PropsWithChildren {
-  itemsPerPage: number;
-  totalItems: number;
 }
 
 type Pokemon = {

@@ -1,10 +1,2 @@
-.paginationContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-
-.paginationControls {
-  border: 1px solid black;
+.paginationWrapper {
 }

@@ -1,28 +1,72 @@
-import { useEffect } from "react";
-import { PaginationProps } from "../../types/types";
-import styles from './Pagination.module.css'
+import { useCallback, useEffect, useState } from 'react';
+import { PaginationProps, Pokemon } from '../../types/types';
+import styles from './Pagination.module.css';
+import { BASE_URL } from '../../constants/constants';
+import axios from 'axios';
+import Card from '../Card/Card';
 
-const Pagination: React.FC<PaginationProps> = ({itemsPerPage, totalItems}) => {
-  const totalPages: number = Math.ceil(totalItems / itemsPerPage)
+const Pagination: React.FC<PaginationProps> = ({}) => {
+  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [index, setIndex] = useState(2);
 
-  
+  useEffect(() => {
+    axios.get(BASE_URL).then((response) => {
+      const data = response.data;
+      setPokemonList(data.results);
+      console.log('initial fetch');
+      console.log('data', data);
+    });
+  }, []);
+
+  const fetchData = useCallback(async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    axios
+      .get(`${BASE_URL}?offset=${index}0&limit=10`)
+      .then((response) => {
+        const data: Pokemon[] = response.data.results;
+        console.log('next fetch data', response.data.results);
+        setPokemonList((previous) => [...previous, ...data]);
+      })
+      .catch((err) => console.log('Error:', err));
+    setIndex((previous) => previous + 1);
+    setIsLoading(false);
+  }, [index, isLoading]);
+
   useEffect(() => {
     const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight - 10) {
-        console.log('scroll over')
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 20) {
+        console.log('scroll over');
+        fetchData();
       }
-    }
+    };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll',handleScroll)
-  },[]);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [fetchData]);
 
-  
+  console.log('Pokemon list', pokemonList);
+
   return (
-    <div className={styles.paginationContainer}>
-    <p>Total: {totalPages}</p>
+    <div
+      className={styles.paginationWrapper}
+      style={{ backgroundColor: 'pink' }}
+    >
+      <div className={styles.mainFlow}>
+        {pokemonList.map((el: Pokemon) => (
+          <Card pokemon={el.name} id={el.url.slice(34)} />
+        ))}
+      </div>
+      {isLoading ? (
+        <p className={styles.loader}>Loading...Calling the professor</p>
+      ) : (
+        <p className={styles.loader}>Here's you Pokémon</p>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default Pagination;
