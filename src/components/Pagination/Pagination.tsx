@@ -23,7 +23,6 @@ const Pagination: React.FC<PaginationProps> = () => {
   const fetchData = useCallback(async () => {
     if (isLoading) return
     setIsLoading(true);
-    console.log('isLoading', isLoading)
     axios
       .get(`${BASE_URL}?offset=${index}0&limit=10`)
       .then((response) => {
@@ -32,7 +31,6 @@ const Pagination: React.FC<PaginationProps> = () => {
       })
       .catch((err) => console.log('Error:', err));
     setIndex((previous) => previous + 1);
-    console.log('isLoading', isLoading)
     setIsLoading(false);
   }, [index, isLoading]);
 
@@ -41,7 +39,6 @@ const Pagination: React.FC<PaginationProps> = () => {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
       if (scrollTop + clientHeight >= scrollHeight - 20) {
-        console.log('scroll over');
         fetchData();
       }
     };
