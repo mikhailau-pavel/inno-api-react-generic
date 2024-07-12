@@ -1,6 +1,8 @@
+import LoginForm from "../../components/LoginForm/LoginForm";
+
 const LoginPage = () => {
-  return <div>
-    Login Page Text Placheloder
-  </div>;
+  return (
+    <LoginForm />
+  );
 };
 export default LoginPage;

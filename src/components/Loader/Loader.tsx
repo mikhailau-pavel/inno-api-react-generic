@@ -6,7 +6,7 @@ const Loader: React.FC = () => {
     <div className={styles.loaderContainer}>
       <img
         src={loader}
-        alt="rotating pokeball"
+        alt="jumping pokeball"
         className={styles.loaderImage}
       />
       <p className={styles.loaderText}> Loading </p>

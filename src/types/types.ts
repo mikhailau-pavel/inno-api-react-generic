@@ -8,9 +8,18 @@ interface CardProps extends PropsWithChildren {
 interface PaginationProps extends PropsWithChildren {
 }
 
+interface NavBarProps extends PropsWithChildren {
+}
+
+interface UserContextProps {
+  username?: string;
+  isAuthorized?: boolean;
+  uid?: number;
+}
+
 type Pokemon = {
   name: string;
   url: string;
 }
 
-export type { Pokemon, CardProps, PaginationProps }
+export type { Pokemon, CardProps, PaginationProps, NavBarProps, UserContextProps }
