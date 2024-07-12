@@ -5,9 +5,12 @@ interface CardProps extends PropsWithChildren {
   id: string;
 }
 
+interface PaginationProps extends PropsWithChildren {
+}
+
 type Pokemon = {
   name: string;
   url: string;
 }
 
-export type { Pokemon, CardProps }
+export type { Pokemon, CardProps, PaginationProps }
