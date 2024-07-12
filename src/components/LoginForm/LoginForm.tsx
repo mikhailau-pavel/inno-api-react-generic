@@ -1,14 +1,14 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useContext, useState } from 'react';
 import auth from '../../firebase';
-//import UserContext from '../../store/store';
+import { UserContext } from '../../store/store';
 
 
 const LoginForm = () => {
   //redirect after
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  //const {userData, setUserData} = useContext(UserContext)
+  const userInfo = useContext(UserContext)
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
@@ -16,8 +16,9 @@ const LoginForm = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log('login attempt', user.email)
+        //userInfo.setUserData(user.email)
         //setEmail(user.email)
-        console.log('check context', email)
+        console.log('check context', userInfo)
         //navigate('/login')
       })
       .catch((error) => console.log('error', error));
