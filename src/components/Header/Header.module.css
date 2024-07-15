@@ -1,0 +1,17 @@
+.headerContainer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.headerTitle{
+  align-self: flex-start;
+  padding-right: 10px;
+  border-right: 1px solid black;
+}
+
+.greetingMessage{
+  padding-left: 10px;
+  border-left: 1px solid black;
+}

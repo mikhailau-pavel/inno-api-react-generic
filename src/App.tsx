@@ -9,9 +9,8 @@ import { useEffect, useState } from 'react';
 import auth from './firebase';
 
 function App() {
-  //string null to the interface?
   const [userData, setUserData] = useState<string | null>(null);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -19,7 +18,7 @@ function App() {
         setUserData(userData);
       } else {
         setUserData(null);
-        //navigate('/');
+        navigate('/login');
       }
     });
 

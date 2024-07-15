@@ -3,12 +3,13 @@ import { useContext, useState } from 'react';
 import auth from '../../firebase';
 import { UserContext } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
+import styles from './LoginForm.module.css';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUserData } = useContext(UserContext);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -23,7 +24,7 @@ const LoginForm = () => {
       );
       const user = userCredentials.user;
       setUserData(user.email || '');
-      //navigate('/');
+      navigate('/');
     } catch (error) {
       console.log('error', error);
     }
@@ -31,7 +32,7 @@ const LoginForm = () => {
   //<span id="emailFeedback"></span>
   //placeholder prop?
   return (
-    <div className="loginFormContainer">
+    <div className={styles.formContainer}>
       <h2>Login:</h2>
       <form action="">
         <label htmlFor="email">Email:</label>
@@ -53,7 +54,11 @@ const LoginForm = () => {
           name="password"
           required
         />
-        <button type="submit" onClick={onSubmit}>
+        <button
+          type="submit"
+          onClick={onSubmit}
+          className={styles.submitButton}
+        >
           Log-in
         </button>
       </form>
