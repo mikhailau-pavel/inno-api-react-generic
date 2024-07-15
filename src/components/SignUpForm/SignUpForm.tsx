@@ -8,12 +8,27 @@ const SignUpForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [formError, setFormError] = useState<string | null>(null);
 
   const onSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
 
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredentials.user;
+      console.log('signed user', user);
+      setFormError(null);
+      navigate('/login');
+    } catch (error) {
+      setFormError(String(error));
+      console.log('error', error);
+    }
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
@@ -46,6 +61,7 @@ const SignUpForm = () => {
           name="password"
           required
         />
+        {formError && <span>{formError}</span>}
         <button
           type="submit"
           onClick={onSubmit}

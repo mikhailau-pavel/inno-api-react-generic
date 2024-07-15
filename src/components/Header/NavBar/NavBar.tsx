@@ -9,14 +9,14 @@ const NavBar: React.FC<NavBarProps> = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const { userData, setUserData } = useContext(UserContext);
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
       await auth.signOut();
       setUserData(null);
       navigate('/');
+      sessionStorage.removeItem('user');
     } catch (error) {
       console.log('error: ', error);
     }

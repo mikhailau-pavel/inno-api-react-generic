@@ -25,6 +25,12 @@ function App() {
     return () => unsubscribe();
   }, [userData]);
 
+  useEffect(() => {
+      const userFromStorage = sessionStorage.getItem('user');
+      console.log('from session storage', userFromStorage)
+      if (userFromStorage) setUserData(userFromStorage)
+  }, [])
+
   return (
     <>
       <UserContext.Provider value={{ userData, setUserData }}>

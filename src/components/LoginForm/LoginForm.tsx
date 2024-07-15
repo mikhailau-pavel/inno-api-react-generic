@@ -8,6 +8,7 @@ import styles from './LoginForm.module.css';
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [formError, setFormError] = useState<string | null>(null);
   const { setUserData } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -25,12 +26,12 @@ const LoginForm = () => {
       const user = userCredentials.user;
       setUserData(user.email || '');
       navigate('/');
+      sessionStorage.setItem('user', String(user.email))
     } catch (error) {
+      setFormError(String(error));
       console.log('error', error);
     }
   };
-  //<span id="emailFeedback"></span>
-  //placeholder prop?
   return (
     <div className={styles.formContainer}>
       <h2>Login:</h2>
@@ -45,7 +46,7 @@ const LoginForm = () => {
           size={20}
           required
         />
-        <label htmlFor="pass">Password(min 6):</label>
+        <label htmlFor="pass">Password:</label>
         <input
           type="password"
           id="pass"
@@ -54,6 +55,7 @@ const LoginForm = () => {
           name="password"
           required
         />
+        {formError && <span>{formError}</span>}
         <button
           type="submit"
           onClick={onSubmit}
