@@ -3,27 +3,28 @@ import { useContext, useState } from 'react';
 import auth from '../../firebase';
 import { UserContext } from '../../store/store';
 
-
 const LoginForm = () => {
   //redirect after
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const userInfo = useContext(UserContext)
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const { setUserData } = useContext(UserContext);
+
+  const onSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log('login attempt', user.email)
-        //userInfo.setUserData(user.email)
-        //setEmail(user.email)
-        console.log('check context', userInfo)
-        //navigate('/login')
-      })
-      .catch((error) => console.log('error', error));
+    try {
+      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredentials.user;
+      console.log('login attempt', user.email);
+      setUserData(user.email || '');
+      console.log('check context', { setUserData });
+      // navigate('/login') usenavigate from router 
+    } catch (error) {
+      console.log('error', error);
+    }
   };
-  //jsify
   //<span id="emailFeedback"></span>
   //placeholder prop?
   return (

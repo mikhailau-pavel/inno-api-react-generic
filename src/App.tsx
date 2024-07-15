@@ -8,17 +8,17 @@ import { UserContext } from './store/store';
 import { useState } from 'react';
 
 function App() {
-  const [userData, setUserData] = useState('')
-  
+  const [userData, setUserData] = useState('');
+
   return (
     <>
-      <UserContext.Provider value={{userData, setUserData}}>
+      <UserContext.Provider value={{ userData, setUserData }}>
         <Header />
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<SignUpPage />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<SignUpPage />} />
+        </Routes>
       </UserContext.Provider>
     </>
   );
