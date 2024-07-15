@@ -61,7 +61,7 @@ const LoginForm = () => {
           onClick={onSubmit}
           className={styles.submitButton}
         >
-          Log-in
+          Login
         </button>
       </form>
     </div>
