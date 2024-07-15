@@ -1,14 +1,30 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Header from './components/Header/Header';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
 import { UserContext } from './store/store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import auth from './firebase';
 
 function App() {
-  const [userData, setUserData] = useState('');
+  //string null to the interface?
+  const [userData, setUserData] = useState<string | null>(null);
+  //const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserData(userData);
+      } else {
+        setUserData(null);
+        //navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [userData]);
 
   return (
     <>

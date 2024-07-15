@@ -10,8 +10,8 @@ interface PaginationProps extends PropsWithChildren {}
 interface NavBarProps extends PropsWithChildren {}
 
 interface UserContextProps {
-  userData: string;
-  setUserData: (email: string) => void;
+  userData: string | null;
+  setUserData: (email: string | null) => void;
 }
 
 type Pokemon = {

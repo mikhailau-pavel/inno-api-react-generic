@@ -1,24 +1,27 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import auth from '../../firebase';
-
+import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = () => {
-  //redirect mb
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const navigate = useNavigate();
+
+  const onSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log(user)
-        //navigate('/login')
+        console.log(user);
+        navigate('/login');
       })
       .catch((error) => console.log(error));
   };
-  //<span id="emailFeedback"></span>
+
   return (
     <div className="signUpFormContainer">
       <h2>Sign up:</h2>

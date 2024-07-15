@@ -2,12 +2,13 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useContext, useState } from 'react';
 import auth from '../../firebase';
 import { UserContext } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-  //redirect after
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUserData } = useContext(UserContext);
+  //const navigate = useNavigate();
 
   const onSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -15,12 +16,14 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredentials.user;
-      console.log('login attempt', user.email);
       setUserData(user.email || '');
-      console.log('check context', { setUserData });
-      // navigate('/login') usenavigate from router 
+      //navigate('/');
     } catch (error) {
       console.log('error', error);
     }

@@ -1,23 +1,33 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { NavBarProps } from '../../../types/types';
 import { useContext } from 'react';
-//import UserContext from '../../../store/store';
-import styles from './NavBar.module.css'
+import styles from './NavBar.module.css';
+import { UserContext } from '../../../store/store';
+import auth from '../../../firebase';
 
 const NavBar: React.FC<NavBarProps> = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  //const userData = useContext(UserContext)
-  //temp >
-  const isAuthorized = false
+  const { userData, setUserData } = useContext(UserContext);
+  const navigate = useNavigate()
 
-  //console.log('is Authorized', userData)
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+      setUserData(null);
+      navigate('/');
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  };
+
   return (
-    <div className="navBarContainer">
-      {isHomePage && !isAuthorized && <NavLink to="/register">Sign Up</NavLink>}
-      {isHomePage && !isAuthorized && <NavLink to="/login">Login</NavLink>}
+    <div className={styles.navBarContainer}>
+      {isHomePage && !userData && <NavLink to="/register">Sign Up</NavLink>}
+      {isHomePage && !userData && <NavLink to="/login">Login</NavLink>}
       {!isHomePage && <NavLink to="/">Home</NavLink>}
-      {isAuthorized && <p className={styles.greeting}> Hello </p>}
+      {userData && <button onClick={handleSignOut}>Sign Out</button>}
     </div>
   );
 };
