@@ -7,6 +7,7 @@ import SignUpPage from './pages/SignUpPage/SignUpPage';
 import { UserContext } from './store/store';
 import { useEffect, useState } from 'react';
 import auth from './firebase';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
 function App() {
   const [userData, setUserData] = useState<string | null>(null);
@@ -39,6 +40,7 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<SignUpPage />} />
+          <Route path="profile" element={<ProfilePage />} />
         </Routes>
       </UserContext.Provider>
     </>
