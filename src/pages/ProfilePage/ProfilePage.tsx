@@ -2,16 +2,21 @@ import { useState } from 'react';
 import styles from './ProfilePage.module.css';
 import { getDatabase, ref, set } from 'firebase/database';
 import axios from 'axios';
-import { IMAGE_UPLOAD_API_KEY, IMAGE_UPLOAD_BASE_URL } from '../../constants/constants';
+import {
+  IMAGE_UPLOAD_API_KEY,
+  IMAGE_UPLOAD_BASE_URL,
+} from '../../constants/constants';
 
 const ProfilePage: React.FC = () => {
   const [firstName, setFirstName] = useState<string | undefined>('');
   const [formError, setFormError] = useState<string | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [image, setImage] = useState<Blob | null>(null);
+  const [formData, setFormData] = useState({});
+
   const writeUserData = (name: string | undefined) => {
     const db = getDatabase();
-    set(ref(db, 'users/' + 1), {name: name})
-  } 
+    set(ref(db, 'users/' + 1), { name: name });
+  };
 
   const onSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -20,7 +25,7 @@ const ProfilePage: React.FC = () => {
 
     try {
       console.log('who?', firstName);
-      writeUserData(firstName)
+      writeUserData(firstName);
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
@@ -28,33 +33,46 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  const uploadPhoto = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const uploadPhoto = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    const formData = new FormData()
-    formData.set('key', IMAGE_UPLOAD_API_KEY)
-    formData.append('image', 'to base64 whatever')
-    console.log('formData key', formData.get('key'))
 
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', 'Client-ID {{clientId}}');
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formData,
+      redirect: 'follow',
+    };
 
     try {
-      axios.post(`${IMAGE_UPLOAD_BASE_URL}?key=${IMAGE_UPLOAD_API_KEY}&source=${imageUrl}`)/*, {
-        firstName: 'test',
-      }, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })*/
-      .then((response) => {
-        const data = response.data;
-        console.log('data res', data.results)
-      })
-      console.log('url check', `${IMAGE_UPLOAD_BASE_URL}?key=${IMAGE_UPLOAD_API_KEY}&source=${imageUrl}`)
-      
+      await axios
+        .post(
+          `${IMAGE_UPLOAD_BASE_URL}, ${requestOptions}`
+        )
+        .then((response) => {
+          const data = response.data;
+          console.log('data res', data.results);
+        });
     } catch (error) {
       setFormError(String(error));
       console.log('error', error);
-      }
     }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      const formData = new FormData();
+      //formData.set('key', IMAGE_UPLOAD_API_KEY);
+      formData.append('image', e.target.files[0], e.target.files[0].name);
+      formData.append('description', `this is profile picture`);
+      setFormData(formData)
+      console.log('form-data', formData.getAll('image'));
+      console.log('e.target.files[0]', e.target.files[0]);
+    }
+  };
 
   return (
     <div className={styles.profilePageContainer}>
@@ -81,7 +99,7 @@ const ProfilePage: React.FC = () => {
           type="file"
           id="profilePicture"
           name="profilePicture"
-          onChange={(e) => setImageUrl(e.target.value)}
+          onChange={handleFileInputChange}
         />
         <button
           type="submit"
