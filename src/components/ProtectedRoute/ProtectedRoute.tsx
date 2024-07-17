@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom';
 import { ProtectedRouteProps } from '../../types/types';
 
-const ProtectedRoute = ({ user, children }: ProtectedRouteProps) => {
-  if (!user) {
+const ProtectedRoute = ({ authorizedUser, children }: ProtectedRouteProps) => {
+  if (!authorizedUser) {
     return <Navigate to="/login" replace />;
   }
   return children;

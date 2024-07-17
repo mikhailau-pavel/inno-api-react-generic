@@ -13,6 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 function App() {
   const [userData, setUserData] = useState<string | null>(null);
   const navigate = useNavigate();
+  const authorizedUser = sessionStorage.getItem('userUid')
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -43,7 +44,7 @@ function App() {
           <Route
             path="profile"
             element={
-              <ProtectedRoute user={userData}>
+              <ProtectedRoute authorizedUser={authorizedUser}>
                 <ProfilePage />
               </ProtectedRoute>
             }

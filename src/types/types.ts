@@ -10,7 +10,7 @@ interface PaginationProps extends PropsWithChildren {}
 interface NavBarProps extends PropsWithChildren {}
 
 interface ProtectedRouteProps extends PropsWithChildren {
-  user: string | null;
+  authorizedUser: string | null;
 }
 
 interface ProfileData {
