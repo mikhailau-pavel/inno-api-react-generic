@@ -9,6 +9,10 @@ interface PaginationProps extends PropsWithChildren {}
 
 interface NavBarProps extends PropsWithChildren {}
 
+interface ProtectedRouteProps extends PropsWithChildren {
+  user: string | null;
+}
+
 interface ProfileData {
   firstName?: string;
   lastName?: string;
@@ -32,12 +36,26 @@ type SetProfileData = (
   userUid: string | null
 ) => void;
 
+type GetProfileData = {
+  firstName: {
+    firstName: string;
+  },
+  lastName: {
+    lastName: string;
+  }
+  imageUrl: {
+    imageUrl: string;
+  }
+}
+
 export type {
   Pokemon,
   CardProps,
   PaginationProps,
   NavBarProps,
   UserContextProps,
+  ProtectedRouteProps,
   ProfileData,
-  SetProfileData
+  SetProfileData,
+  GetProfileData
 };

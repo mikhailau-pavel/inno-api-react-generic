@@ -8,6 +8,7 @@ import { UserContext } from './store/store';
 import { useEffect, useState } from 'react';
 import auth from './firebase';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 function App() {
   const [userData, setUserData] = useState<string | null>(null);
@@ -27,10 +28,9 @@ function App() {
   }, [userData]);
 
   useEffect(() => {
-      const userFromStorage = sessionStorage.getItem('userUid');
-      console.log('from session storage', userFromStorage)
-      if (userFromStorage) setUserData(userFromStorage)
-  }, [])
+    const userFromStorage = sessionStorage.getItem('userUid');
+    if (userFromStorage) setUserData(userFromStorage);
+  }, []);
 
   return (
     <>
@@ -40,7 +40,16 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<SignUpPage />} />
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute user={userData}>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="*" element={<p>404 Page Not Found</p>} />
         </Routes>
       </UserContext.Provider>
     </>

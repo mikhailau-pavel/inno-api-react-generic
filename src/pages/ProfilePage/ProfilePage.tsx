@@ -1,14 +1,13 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from './ProfilePage.module.css';
-import { getDatabase, ref, set } from 'firebase/database';
 import axios from 'axios';
 import {
   IMAGE_UPLOAD_API_KEY,
   IMGBB_UPLOAD_BASE_URL,
 } from '../../constants/constants';
-import { writeUserData } from '../../api/database';
+import { retrieveUserData, writeUserData } from '../../api/database';
 import { UserContext } from '../../store/store';
-//import { ProfileData } from '../../types/types';
+import { GetProfileData } from '../../types/types';
 
 const ProfilePage: React.FC = () => {
   const [firstName, setFirstName] = useState<string | undefined>('');
@@ -17,12 +16,20 @@ const ProfilePage: React.FC = () => {
   const [image, setImage] = useState<Blob | null>(null);
   const [formData, setFormData] = useState({});
   const [imageUrl, setImageUrl] = useState<string | undefined>('');
-  //const [userData, setUserData] = useState<ProfileData>({});
+  const [userData, setUserData] = useState<GetProfileData | null>();
 
+  const userUid = useContext(UserContext).userData;
 
-  const userUid = useContext(UserContext).userData
+  useEffect(() => {
+    const setCurrentUserData = async () => {
+      const currentUserData = await retrieveUserData(userUid);
+      await setUserData(currentUserData);
+      console.log('user data here', currentUserData)
+    };
+    setCurrentUserData()
+  }, [userUid]);
 
-  const onSubmit = async (
+  const handleNameFieldSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
@@ -51,11 +58,9 @@ const ProfilePage: React.FC = () => {
           key: IMAGE_UPLOAD_API_KEY,
         },
       });
-      const data = response.data;
-      console.log('data res', data);
-      console.log('response.data.data.url', response.data.data.url);
-      setImageUrl(response.data.data.url);
-    } catch (error) {
+      const imageUrl: string | undefined = response.data.data.url;
+      writeUserData(firstName, lastName, imageUrl, userUid);
+    } catch (error) { 
       setFormError(String(error));
       console.log('error', error);
     }
@@ -65,7 +70,6 @@ const ProfilePage: React.FC = () => {
     if (e.target.files && e.target.files[0]) {
       setImage(e.target.files[0]);
       const formData = new FormData();
-      //formData.set('key', IMAGE_UPLOAD_API_KEY);
       formData.append('image', e.target.files[0], e.target.files[0].name);
       formData.append('description', `this is profile picture`);
       setFormData(formData);
@@ -78,11 +82,13 @@ const ProfilePage: React.FC = () => {
     <div className={styles.profilePageContainer}>
       <div className={styles.profileContainer}>
         {formError && <span>{formError}</span>}
+        <div className={styles.profileInfoContainer}>
         <p>Profile:</p>
         <div className={styles.profileInfo}>
-          <p>First Name: {firstName || 'Anonymous'}</p>
-          <p>Last Name: {lastName || ' Anonymous'}</p>
-          {imageUrl && <img src={imageUrl} alt="Profile" />}
+          <p>First Name: {userData ? userData.firstName.firstName : 'Anonymous'}</p>
+          <p>Last Name: {userData ? userData.lastName.lastName : 'Anonymous'}</p>
+          {userData && <img src={userData.imageUrl.imageUrl} alt="Profile" className={styles.profilePicture}/>}
+        </div>
         </div>
         <label htmlFor="firstName">First name:</label>
         <input
@@ -100,7 +106,7 @@ const ProfilePage: React.FC = () => {
         />
         <button
           type="submit"
-          onClick={onSubmit}
+          onClick={handleNameFieldSubmit}
           className={styles.submitButton}
         >
           Submit
