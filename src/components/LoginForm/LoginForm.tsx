@@ -24,9 +24,10 @@ const LoginForm = () => {
         password
       );
       const user = userCredentials.user;
-      setUserData(user.email || '');
+      setUserData(user.uid || '');
       navigate('/');
-      sessionStorage.setItem('user', String(user.email))
+      //to uid too
+      sessionStorage.setItem('userUid', String(user.uid))
     } catch (error) {
       setFormError(String(error));
       console.log('error', error);

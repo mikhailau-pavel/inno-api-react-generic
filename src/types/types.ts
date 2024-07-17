@@ -25,6 +25,13 @@ type Pokemon = {
   url: string;
 };
 
+type SetProfileData = (
+  firstName: string | undefined, 
+  lastName: string | undefined, 
+  imageUrl: string | undefined, 
+  userUid: string | null
+) => void;
+
 export type {
   Pokemon,
   CardProps,
@@ -32,4 +39,5 @@ export type {
   NavBarProps,
   UserContextProps,
   ProfileData,
+  SetProfileData
 };

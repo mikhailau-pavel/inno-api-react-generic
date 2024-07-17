@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from './ProfilePage.module.css';
 import { getDatabase, ref, set } from 'firebase/database';
 import axios from 'axios';
@@ -6,6 +6,8 @@ import {
   IMAGE_UPLOAD_API_KEY,
   IMGBB_UPLOAD_BASE_URL,
 } from '../../constants/constants';
+import { writeUserData } from '../../api/database';
+import { UserContext } from '../../store/store';
 //import { ProfileData } from '../../types/types';
 
 const ProfilePage: React.FC = () => {
@@ -17,26 +19,15 @@ const ProfilePage: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string | undefined>('');
   //const [userData, setUserData] = useState<ProfileData>({});
 
-  const writeUserData = (
-    firstName: string | undefined,
-    lastName: string | undefined,
-    imageUrl: string | undefined
-  ) => {
-    const db = getDatabase();
-    //if(??)
-    set(ref(db, 'users/' + 'firstName'), { firstName: firstName });
-    set(ref(db, 'users/' + 'lastName'), { lastName: lastName });
-    set(ref(db, 'users/' + 'imageUrl'), { imageUrl: imageUrl });
-  };
+
+  const userUid = useContext(UserContext).userData
 
   const onSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-
     try {
-      console.log('who?', firstName);
-      writeUserData(firstName, lastName, imageUrl);
+      writeUserData(firstName, lastName, imageUrl, userUid);
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
