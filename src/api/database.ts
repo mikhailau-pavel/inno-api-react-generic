@@ -1,4 +1,4 @@
-import { child, DataSnapshot, get, getDatabase, ref, set } from "firebase/database";
+import { child, get, getDatabase, ref, set } from "firebase/database";
 import { GetProfileData } from "../types/types";
 
 const writeUserData = (

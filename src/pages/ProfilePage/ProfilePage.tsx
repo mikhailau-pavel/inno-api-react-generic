@@ -15,7 +15,6 @@ const ProfilePage: React.FC = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const [image, setImage] = useState<Blob | null>(null);
   const [formData, setFormData] = useState({});
-  const [imageUrl, setImageUrl] = useState<string | undefined>('');
   const [userData, setUserData] = useState<GetProfileData | null>();
 
   const userUid = useContext(UserContext).userData;
@@ -24,9 +23,9 @@ const ProfilePage: React.FC = () => {
     const setCurrentUserData = async () => {
       const currentUserData = await retrieveUserData(userUid);
       await setUserData(currentUserData);
-      console.log('user data here', currentUserData)
+      console.log('user data here', currentUserData);
     };
-    setCurrentUserData()
+    setCurrentUserData();
   }, [userUid]);
 
   const handleNameFieldSubmit = async (
@@ -34,6 +33,7 @@ const ProfilePage: React.FC = () => {
   ) => {
     e.preventDefault();
     try {
+      const imageUrl = undefined
       writeUserData(firstName, lastName, imageUrl, userUid);
       setFormError(null);
     } catch (error) {
@@ -58,9 +58,10 @@ const ProfilePage: React.FC = () => {
           key: IMAGE_UPLOAD_API_KEY,
         },
       });
+      console.log('response', response.data)
       const imageUrl: string | undefined = response.data.data.url;
       writeUserData(firstName, lastName, imageUrl, userUid);
-    } catch (error) { 
+    } catch (error) {
       setFormError(String(error));
       console.log('error', error);
     }
@@ -83,12 +84,24 @@ const ProfilePage: React.FC = () => {
       <div className={styles.profileContainer}>
         {formError && <span>{formError}</span>}
         <div className={styles.profileInfoContainer}>
-        <p>Profile:</p>
-        <div className={styles.profileInfo}>
-          <p>First Name: {userData ? userData.firstName.firstName : 'Anonymous'}</p>
-          <p>Last Name: {userData ? userData.lastName.lastName : 'Anonymous'}</p>
-          {userData && <img src={userData.imageUrl.imageUrl} alt="Profile" className={styles.profilePicture}/>}
-        </div>
+          <p>Profile:</p>
+          <div className={styles.profileInfo}>
+            <p>
+              First Name:{' '}
+              {userData ? userData.firstName.firstName : 'Anonymous'}
+            </p>
+            <p>
+              Last Name: {userData ? userData.lastName.lastName : 'Anonymous'}
+            </p>
+            {userData && (
+              <img
+              //swap source back after db
+                src={'../../assets/loader.gif'}
+                alt="Profile"
+                className={styles.profilePicture}
+              />
+            )}
+          </div>
         </div>
         <label htmlFor="firstName">First name:</label>
         <input

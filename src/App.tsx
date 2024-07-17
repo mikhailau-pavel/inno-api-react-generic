@@ -9,7 +9,7 @@ import { useEffect, useReducer, useState } from 'react';
 import auth from './firebase';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
-import { UserStateProps } from './types/types';
+import { UserStoreProps } from './types/types';
 import UserStore from './store/userStore';
 import { userReducer } from './utils/utils';
 
@@ -17,12 +17,12 @@ function App() {
   const [userData, setUserData] = useState<string | null>(null);
   const navigate = useNavigate();
   const authorizedUser = sessionStorage.getItem('userUid');
-  const initialUserStateProps: UserStateProps = {
+  const initialUserStateProps: UserStoreProps = {
     userUid: null,
     userName: null,
     userPicUrl: null,
   };
-  const [userState, dispatch] = useReducer(userReducer, initialUserStateProps);
+  const [userStore, dispatch] = useReducer(userReducer, initialUserStateProps);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -35,7 +35,7 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [userData]);
+  }, [userData, navigate]);
 
   useEffect(() => {
     const userFromStorage = sessionStorage.getItem('userUid');
@@ -45,7 +45,7 @@ function App() {
   return (
     <>
       <UserContext.Provider value={{ userData, setUserData }}>
-        <UserStore.Provider value={{ userState, dispatch }}>
+        <UserStore.Provider value={{ userStore, dispatch }}>
           <Header />
           <Routes>
             <Route path="/" element={<MainPage />} />
