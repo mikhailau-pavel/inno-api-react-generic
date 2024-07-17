@@ -5,15 +5,24 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import Header from './components/Header/Header';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
 import { UserContext } from './store/store';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import auth from './firebase';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import { UserStateProps } from './types/types';
+import UserStore from './store/userStore';
+import { userReducer } from './utils/utils';
 
 function App() {
   const [userData, setUserData] = useState<string | null>(null);
   const navigate = useNavigate();
-  const authorizedUser = sessionStorage.getItem('userUid')
+  const authorizedUser = sessionStorage.getItem('userUid');
+  const initialUserStateProps: UserStateProps = {
+    userUid: null,
+    userName: null,
+    userPicUrl: null,
+  };
+  const [userState, dispatch] = useReducer(userReducer, initialUserStateProps);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -36,22 +45,24 @@ function App() {
   return (
     <>
       <UserContext.Provider value={{ userData, setUserData }}>
-        <Header />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<SignUpPage />} />
-          <Route
-            path="profile"
-            element={
-              <ProtectedRoute authorizedUser={authorizedUser}>
-                <ProfilePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="*" element={<p>404 Page Not Found</p>} />
-        </Routes>
+        <UserStore.Provider value={{ userState, dispatch }}>
+          <Header />
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<SignUpPage />} />
+            <Route
+              path="profile"
+              element={
+                <ProtectedRoute authorizedUser={authorizedUser}>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="*" element={<p>404 Page Not Found</p>} />
+          </Routes>
+        </UserStore.Provider>
       </UserContext.Provider>
     </>
   );

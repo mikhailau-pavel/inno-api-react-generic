@@ -19,6 +19,13 @@ interface ProfileData {
   imageUrl?: string;
 }
 
+interface UserStoreProps {
+  userUid: string | null;
+  userName: string | null;
+  userPicUrl: string | null;
+}
+
+
 interface UserContextProps {
   userData: string | null;
   setUserData: (email: string | null) => void;
@@ -48,14 +55,26 @@ type GetProfileData = {
   }
 }
 
+type UserStoreAction = {
+  type: string;
+  payload: string | undefined;
+}
+
+type UserStoreReducerFunction = {
+  (state: UserStoreProps, action: UserStoreAction): void 
+}
+
 export type {
   Pokemon,
   CardProps,
   PaginationProps,
   NavBarProps,
+  UserStoreProps,
   UserContextProps,
   ProtectedRouteProps,
   ProfileData,
   SetProfileData,
-  GetProfileData
+  GetProfileData,
+  UserStoreAction,
+  UserStoreReducerFunction
 };
