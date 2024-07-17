@@ -4,18 +4,29 @@ import { getDatabase, ref, set } from 'firebase/database';
 import axios from 'axios';
 import {
   IMAGE_UPLOAD_API_KEY,
-  IMAGE_UPLOAD_BASE_URL,
+  IMGBB_UPLOAD_BASE_URL,
 } from '../../constants/constants';
+//import { ProfileData } from '../../types/types';
 
 const ProfilePage: React.FC = () => {
   const [firstName, setFirstName] = useState<string | undefined>('');
+  const [lastName, setLastName] = useState<string | undefined>('');
   const [formError, setFormError] = useState<string | null>(null);
   const [image, setImage] = useState<Blob | null>(null);
   const [formData, setFormData] = useState({});
+  const [imageUrl, setImageUrl] = useState<string | undefined>('');
+  //const [userData, setUserData] = useState<ProfileData>({});
 
-  const writeUserData = (name: string | undefined) => {
+  const writeUserData = (
+    firstName: string | undefined,
+    lastName: string | undefined,
+    imageUrl: string | undefined
+  ) => {
     const db = getDatabase();
-    set(ref(db, 'users/' + 1), { name: name });
+    //if(??)
+    set(ref(db, 'users/' + 'firstName'), { firstName: firstName });
+    set(ref(db, 'users/' + 'lastName'), { lastName: lastName });
+    set(ref(db, 'users/' + 'imageUrl'), { imageUrl: imageUrl });
   };
 
   const onSubmit = async (
@@ -25,7 +36,7 @@ const ProfilePage: React.FC = () => {
 
     try {
       console.log('who?', firstName);
-      writeUserData(firstName);
+      writeUserData(firstName, lastName, imageUrl);
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
@@ -33,28 +44,26 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  const uploadPhoto = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const uploadPhoto = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
-    const myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Client-ID {{clientId}}');
-
-    const requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: formData,
-      redirect: 'follow',
-    };
+    if (!image) {
+      setFormError('select an image');
+      return;
+    }
 
     try {
-      await axios
-        .post(
-          `${IMAGE_UPLOAD_BASE_URL}, ${requestOptions}`
-        )
-        .then((response) => {
-          const data = response.data;
-          console.log('data res', data.results);
-        });
+      const response = await axios.post(IMGBB_UPLOAD_BASE_URL, formData, {
+        params: {
+          key: IMAGE_UPLOAD_API_KEY,
+        },
+      });
+      const data = response.data;
+      console.log('data res', data);
+      console.log('response.data.data.url', response.data.data.url);
+      setImageUrl(response.data.data.url);
     } catch (error) {
       setFormError(String(error));
       console.log('error', error);
@@ -68,8 +77,8 @@ const ProfilePage: React.FC = () => {
       //formData.set('key', IMAGE_UPLOAD_API_KEY);
       formData.append('image', e.target.files[0], e.target.files[0].name);
       formData.append('description', `this is profile picture`);
-      setFormData(formData)
-      console.log('form-data', formData.getAll('image'));
+      setFormData(formData);
+      console.log('form-data-image', formData.getAll('image'));
       console.log('e.target.files[0]', e.target.files[0]);
     }
   };
@@ -78,14 +87,25 @@ const ProfilePage: React.FC = () => {
     <div className={styles.profilePageContainer}>
       <div className={styles.profileContainer}>
         {formError && <span>{formError}</span>}
-        <p>Name</p>
-        <p>name-text-placeholder</p>
+        <p>Profile:</p>
+        <div className={styles.profileInfo}>
+          <p>First Name: {firstName || 'Anonymous'}</p>
+          <p>Last Name: {lastName || ' Anonymous'}</p>
+          {imageUrl && <img src={imageUrl} alt="Profile" />}
+        </div>
         <label htmlFor="firstName">First name:</label>
         <input
           type="text"
           id="firstName"
           name="firstName"
           onChange={(e) => setFirstName(e.target.value)}
+        />
+        <label htmlFor="lastName">Last name:</label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          onChange={(e) => setLastName(e.target.value)}
         />
         <button
           type="submit"

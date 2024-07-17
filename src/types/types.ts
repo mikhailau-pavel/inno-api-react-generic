@@ -9,6 +9,12 @@ interface PaginationProps extends PropsWithChildren {}
 
 interface NavBarProps extends PropsWithChildren {}
 
+interface ProfileData {
+  firstName?: string;
+  lastName?: string;
+  imageUrl?: string;
+}
+
 interface UserContextProps {
   userData: string | null;
   setUserData: (email: string | null) => void;
@@ -25,4 +31,5 @@ export type {
   PaginationProps,
   NavBarProps,
   UserContextProps,
+  ProfileData,
 };
