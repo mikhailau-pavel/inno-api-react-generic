@@ -1,0 +1,11 @@
+.formContainer > form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.submitButton {
+  border: 1px solid black;
+}
