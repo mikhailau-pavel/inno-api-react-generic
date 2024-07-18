@@ -25,6 +25,9 @@ const ProfilePage: React.FC = () => {
     const setCurrentUserData = async () => {
       const currentUserData = await retrieveUserData(userUid);
       await setUserData(currentUserData);
+      if (currentUserData) 
+        dispatch({type: 'setUserName', payload: currentUserData?.firstName.firstName})
+        dispatch({type: 'setUserPicUrl', payload: currentUserData?.imageUrl.imageUrl})
       console.log('user data here', currentUserData);
     };
     setCurrentUserData();
