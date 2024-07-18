@@ -1,5 +1,6 @@
 import { Dispatch, PropsWithChildren, Reducer, ReducerAction, ReducerState } from 'react';
 
+
 interface CardProps extends PropsWithChildren {
   pokemon: string;
   id: string;
@@ -82,4 +83,5 @@ export type {
   UserStoreAction,
   UserStoreReducerFunction,
   UserStoreContextProps,
+
 };

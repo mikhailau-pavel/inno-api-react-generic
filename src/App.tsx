@@ -13,6 +13,7 @@ import UserStore from './store/userStore';
 import { userReducer } from './utils/utils';
 import { UserStoreAction, UserStoreProps} from './types/types';
 
+
 function App() {
   const [userData, setUserData] = useState<string | null>(null);
   const navigate = useNavigate();
