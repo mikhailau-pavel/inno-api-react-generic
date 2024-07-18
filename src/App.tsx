@@ -5,7 +5,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import Header from './components/Header/Header';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
 import { UserContext } from './store/store';
-import { Reducer, ReducerWithoutAction, useEffect, useReducer, useState } from 'react';
+import { Reducer, useEffect, useReducer, useState } from 'react';
 import auth from './firebase';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
@@ -36,7 +36,7 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [userData, navigate]);
+  }, [userData]);
 
   useEffect(() => {
     const userFromStorage = sessionStorage.getItem('userUid');
