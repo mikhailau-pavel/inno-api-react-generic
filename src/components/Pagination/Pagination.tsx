@@ -29,7 +29,9 @@ const Pagination: React.FC<PaginationProps> = () => {
         const data: Pokemon[] = response.data.results;
         setPokemonList((previous) => [...previous, ...data]);
       })
-      .catch((err) => console.log('Error:', err));
+      .catch((error) => {
+        throw error
+      });
     setIndex((previous) => previous + 1);
     setIsLoading(false);
   }, [index, isLoading]);

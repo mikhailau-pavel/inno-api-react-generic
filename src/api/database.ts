@@ -23,16 +23,14 @@ const retrieveUserData = (
   return get(child(dbRef, 'users/' + `${userUid}/`)) 
   .then((snapshot) => {
     if (snapshot.exists()) {
-      console.log('snapshot exists', snapshot.val())
       const userData = snapshot.val()
       return userData
     } else {
-      console.log('no data')
       return null
     }
   })
   .catch ((error) => {
-    console.log('error', error)
+    throw error
   });
 } 
 

@@ -52,7 +52,6 @@ function App() {
         type: 'setUserPicUrl',
         payload: currentUserDataFromDB?.imageUrl.imageUrl,
       });}
-      console.log('user data recieved from DB', currentUserDataFromDB);
     };
     setCurrentUserStore();
   }, [currentUserID]);
@@ -68,7 +67,7 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [currentUserID]);
+  }, [currentUserID, navigate]);
 
   return (
     <>

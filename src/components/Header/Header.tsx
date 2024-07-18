@@ -6,7 +6,6 @@ import { NavLink } from 'react-router-dom';
 
 const Header = () => {
   const { userStore } = useContext(UserStore);
-  console.log('userStore', userStore);
 
   return (
     <div className={styles.headerContainer}>

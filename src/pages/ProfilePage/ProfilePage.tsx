@@ -10,8 +10,8 @@ import { UserContext } from '../../store/store';
 import UserStore from '../../store/userStore';
 
 const ProfilePage: React.FC = () => {
-  const [firstName, setFirstName] = useState<string | undefined>('');
-  const [lastName, setLastName] = useState<string | undefined>('');
+  const [firstName, setFirstName] = useState<string | null>('');
+  const [lastName, setLastName] = useState<string | null>('');
   const [formError, setFormError] = useState<string | null>(null);
   const [image, setImage] = useState<Blob | null>(null);
   const [formData, setFormData] = useState({});
@@ -24,12 +24,11 @@ const ProfilePage: React.FC = () => {
   ) => {
     e.preventDefault();
     try {
-      const imageUrl = undefined
-      writeUserData(firstName, lastName, imageUrl, userUid);
+      writeUserData(firstName, lastName, null, userUid);
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
-      console.log('error', error);
+      throw error
     }
   };
 
@@ -49,12 +48,11 @@ const ProfilePage: React.FC = () => {
           key: IMAGE_UPLOAD_API_KEY,
         },
       });
-      console.log('response', response.data)
-      const imageUrl: string | undefined = response.data.data.url;
+      const imageUrl: string | null = response.data.data.url;
       writeUserData(firstName, lastName, imageUrl, userUid);
     } catch (error) {
       setFormError(String(error));
-      console.log('error', error);
+      throw new Error(`Error:${String(error)}`)
     }
   };
 
@@ -65,8 +63,6 @@ const ProfilePage: React.FC = () => {
       formData.append('image', e.target.files[0], e.target.files[0].name);
       formData.append('description', `this is profile picture`);
       setFormData(formData);
-      console.log('form-data-image', formData.getAll('image'));
-      console.log('e.target.files[0]', e.target.files[0]);
     }
   };
 

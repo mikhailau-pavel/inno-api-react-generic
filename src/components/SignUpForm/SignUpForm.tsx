@@ -16,26 +16,20 @@ const SignUpForm = () => {
     e.preventDefault();
 
     try {
-      const userCredentials = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredentials.user;
-      console.log('signed user', user);
+      await createUserWithEmailAndPassword(auth, email, password);
       setFormError(null);
       navigate('/login');
     } catch (error) {
       setFormError(String(error));
-      console.log('error', error);
+      throw error
     }
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log(user);
+      .then(() => {
         navigate('/login');
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        throw error
+      });
   };
 
   return (

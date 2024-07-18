@@ -12,14 +12,10 @@ const NavBar: React.FC<NavBarProps> = () => {
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    try {
       await auth.signOut();
-      setCurrentUserID(undefined);
+      setCurrentUserID(null);
       sessionStorage.removeItem('userUid');
       navigate('/');
-    } catch (error) {
-      console.log('error: ', error);
-    }
   };
 
   return (

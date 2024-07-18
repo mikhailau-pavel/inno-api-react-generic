@@ -27,13 +27,12 @@ const LoginForm = () => {
       );
       const user = userCredentials.user;
       setCurrentUserID(user.uid || '');
-      console.log('user id received from login page', user.uid)
       dispatch({type: 'setUserUid', payload: user.uid})
       navigate('/');
       sessionStorage.setItem('userUid', String(user.uid));
     } catch (error) {
       setFormError(String(error));
-      console.log('error', error);
+      throw error;
     }
   };
   return (
