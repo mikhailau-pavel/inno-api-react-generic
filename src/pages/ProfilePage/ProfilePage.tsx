@@ -19,11 +19,7 @@ const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<GetProfileData | null>();
 
   const userUid = useContext(UserContext).currentUserID;
-  const { dispatch } = useContext(UserStore)
-
-  /*useEffect(() => {
-    setCurrentUserStore(userUid);
-  }, [userUid]);*/
+  const { userStore, dispatch } = useContext(UserStore)
 
   const handleNameFieldSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -88,14 +84,14 @@ const ProfilePage: React.FC = () => {
           <div className={styles.profileInfo}>
             <p>
               First Name:{' '}
-              {userData ? userData.firstName.firstName : 'Anonymous'}
+              {typeof userStore.userName != 'undefined' ? userStore.userName : 'Anonymous'}
             </p>
             <p>
-              Last Name: {userData ? userData.lastName.lastName : 'Anonymous'}
+              Last Name: {typeof userStore.userName != 'undefined' ? userStore.userName : 'Anonymous'}
             </p>
-            {userData && (
+            {userStore.userPicUrl && (
               <img
-                src={typeof userData.imageUrl !== "undefined" ? userData.imageUrl.imageUrl : undefined}
+                src={typeof userStore.userPicUrl !== "undefined" ? userStore.userPicUrl : undefined}
                 alt="Profile picture"
                 className={styles.profilePicture}
               />
