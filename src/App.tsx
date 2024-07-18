@@ -14,6 +14,7 @@ import { userReducer } from './utils/utils';
 import { UserStoreAction, UserStoreProps} from './types/types';
 import { retrieveUserData } from './api/database';
 
+
 function App() {
   const [currentUserID, setCurrentUserID] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
