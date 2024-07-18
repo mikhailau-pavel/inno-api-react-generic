@@ -17,7 +17,7 @@ import { retrieveUserData } from './api/database';
 function App() {
   const [currentUserID, setCurrentUserID] = useState<string | null>(() => {
     const initialState = sessionStorage.getItem('userUid');
-    return initialState
+    return initialState;
   });
   const navigate = useNavigate();
   const userFromStorage = sessionStorage.getItem('userUid');
@@ -39,19 +39,20 @@ function App() {
         type: 'setUserUid',
         payload: currentUserID,
       });
-      if (currentUserDataFromDB){
+      if (currentUserDataFromDB) {
         dispatch({
           type: 'setUserName',
           payload: currentUserDataFromDB?.firstName.firstName,
         });
-      dispatch({
-        type: 'setUserLastName',
-        payload: currentUserDataFromDB?.lastName.lastName,
-      });
-      dispatch({
-        type: 'setUserPicUrl',
-        payload: currentUserDataFromDB?.imageUrl.imageUrl,
-      });}
+        dispatch({
+          type: 'setUserLastName',
+          payload: currentUserDataFromDB?.lastName.lastName,
+        });
+        dispatch({
+          type: 'setUserPicUrl',
+          payload: currentUserDataFromDB?.imageUrl.imageUrl,
+        });
+      }
     };
     setCurrentUserStore();
   }, [currentUserID]);
