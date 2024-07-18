@@ -23,6 +23,7 @@ interface ProfileData {
 interface UserStoreProps {
   userUid: string | undefined;
   userName: string | undefined;
+  userLastName: string | undefined;
   userPicUrl: string | undefined;
 }
 
@@ -56,7 +57,7 @@ type GetProfileData = {
 };
 
 type UserStoreAction = {
-  type: 'setUserUid' | 'setUserName' | 'setUserPicUrl';
+  type: 'setUserUid' | 'setUserName' | 'setUserPicUrl' | 'setUserLastName';
   payload: string | undefined;
 };
 

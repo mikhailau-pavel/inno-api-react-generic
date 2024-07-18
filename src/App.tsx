@@ -11,22 +11,26 @@ import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import UserStore from './store/userStore';
 import { userReducer } from './utils/utils';
-import { UserStoreAction, UserStoreProps} from './types/types';
+import { UserStoreAction, UserStoreProps } from './types/types';
 import { retrieveUserData } from './api/database';
 
-
 function App() {
-  const [currentUserID, setCurrentUserID] = useState<string | undefined>(undefined);
+  const [currentUserID, setCurrentUserID] = useState<string | undefined>(
+    undefined
+  );
   const navigate = useNavigate();
   const authorizedUser = sessionStorage.getItem('userUid');
   const initialUserStateProps: UserStoreProps = {
     userUid: undefined,
     userName: undefined,
+    userLastName: undefined,
     userPicUrl: undefined,
   };
 
-  const [userStore, dispatch] = useReducer<Reducer<UserStoreProps, UserStoreAction>>(userReducer, initialUserStateProps);
-  
+  const [userStore, dispatch] = useReducer<
+    Reducer<UserStoreProps, UserStoreAction>
+  >(userReducer, initialUserStateProps);
+
   useEffect(() => {
     const userFromStorage = sessionStorage.getItem('userUid');
     if (userFromStorage) setCurrentUserID(userFromStorage);
@@ -45,13 +49,17 @@ function App() {
           payload: currentUserDataFromDB?.firstName.firstName,
         });
       dispatch({
+        type: 'setUserLastName',
+        payload: currentUserDataFromDB?.lastName.lastName,
+      });
+      dispatch({
         type: 'setUserPicUrl',
         payload: currentUserDataFromDB?.imageUrl.imageUrl,
       });
       console.log('user data recieved from DB', currentUserDataFromDB);
-    }
-    setCurrentUserStore()
-  }, [currentUserID])
+    };
+    setCurrentUserStore();
+  }, [currentUserID]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -65,7 +73,7 @@ function App() {
 
     return () => unsubscribe();
   }, [currentUserID]);
-  
+
   return (
     <>
       <UserContext.Provider value={{ currentUserID, setCurrentUserID }}>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from './ProfilePage.module.css';
 import axios from 'axios';
 import {
@@ -7,7 +7,6 @@ import {
 } from '../../constants/constants';
 import { writeUserData } from '../../api/database';
 import { UserContext } from '../../store/store';
-import { GetProfileData } from '../../types/types';
 import UserStore from '../../store/userStore';
 
 const ProfilePage: React.FC = () => {
@@ -16,7 +15,6 @@ const ProfilePage: React.FC = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const [image, setImage] = useState<Blob | null>(null);
   const [formData, setFormData] = useState({});
-  const [userData, setUserData] = useState<GetProfileData | null>();
 
   const userUid = useContext(UserContext).currentUserID;
   const { userStore, dispatch } = useContext(UserStore)
@@ -87,7 +85,7 @@ const ProfilePage: React.FC = () => {
               {typeof userStore.userName != 'undefined' ? userStore.userName : 'Anonymous'}
             </p>
             <p>
-              Last Name: {typeof userStore.userName != 'undefined' ? userStore.userName : 'Anonymous'}
+              Last Name: {typeof userStore.userLastName != 'undefined' ? userStore.userLastName : 'Anonymous'}
             </p>
             {userStore.userPicUrl && (
               <img

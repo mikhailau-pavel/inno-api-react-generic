@@ -6,6 +6,8 @@ const userReducer = (state: UserStoreProps, action: UserStoreAction) => {
       return { ...state, userUid: action.payload };
     case 'setUserName':
       return { ...state, userName: action.payload };
+    case 'setUserLastName':
+      return { ...state, userLastName: action.payload };
     case 'setUserPicUrl':
       return { ...state, userPicUrl: action.payload };
     default:
