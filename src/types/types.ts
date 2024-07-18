@@ -26,8 +26,8 @@ interface UserStoreProps {
 }
 
 interface UserContextProps {
-  userData: string | null;
-  setUserData: (email: string | null) => void;
+  currentUserID: string | undefined;
+  setCurrentUserID: (email: string | undefined) => void;
 }
 
 type Pokemon = {

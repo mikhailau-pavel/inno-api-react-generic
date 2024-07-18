@@ -5,7 +5,7 @@ import {
   IMAGE_UPLOAD_API_KEY,
   IMGBB_UPLOAD_BASE_URL,
 } from '../../constants/constants';
-import { retrieveUserData, writeUserData } from '../../api/database';
+import { writeUserData } from '../../api/database';
 import { UserContext } from '../../store/store';
 import { GetProfileData } from '../../types/types';
 import UserStore from '../../store/userStore';
@@ -18,20 +18,12 @@ const ProfilePage: React.FC = () => {
   const [formData, setFormData] = useState({});
   const [userData, setUserData] = useState<GetProfileData | null>();
 
-  const userUid = useContext(UserContext).userData;
+  const userUid = useContext(UserContext).currentUserID;
   const { dispatch } = useContext(UserStore)
 
-  useEffect(() => {
-    const setCurrentUserData = async () => {
-      const currentUserData = await retrieveUserData(userUid);
-      await setUserData(currentUserData);
-      if (currentUserData) 
-        dispatch({type: 'setUserName', payload: currentUserData?.firstName.firstName})
-        dispatch({type: 'setUserPicUrl', payload: currentUserData?.imageUrl.imageUrl})
-      console.log('user data here', currentUserData);
-    };
-    setCurrentUserData();
-  }, [userUid]);
+  /*useEffect(() => {
+    setCurrentUserStore(userUid);
+  }, [userUid]);*/
 
   const handleNameFieldSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

@@ -12,9 +12,10 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import UserStore from './store/userStore';
 import { userReducer } from './utils/utils';
 import { UserStoreAction, UserStoreProps} from './types/types';
+import { retrieveUserData } from './api/database';
 
 function App() {
-  const [userData, setUserData] = useState<string | null>(null);
+  const [currentUserID, setCurrentUserID] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
   const authorizedUser = sessionStorage.getItem('userUid');
   const initialUserStateProps: UserStoreProps = {
@@ -24,28 +25,49 @@ function App() {
   };
 
   const [userStore, dispatch] = useReducer<Reducer<UserStoreProps, UserStoreAction>>(userReducer, initialUserStateProps);
+  
+  useEffect(() => {
+    const userFromStorage = sessionStorage.getItem('userUid');
+    if (userFromStorage) setCurrentUserID(userFromStorage);
+  }, []);
+
+  useEffect(() => {
+    const setCurrentUserStore = async () => {
+      const currentUserDataFromDB = await retrieveUserData(currentUserID);
+      dispatch({
+        type: 'setUserUid',
+        payload: currentUserID,
+      });
+      if (currentUserDataFromDB)
+        dispatch({
+          type: 'setUserName',
+          payload: currentUserDataFromDB?.firstName.firstName,
+        });
+      dispatch({
+        type: 'setUserPicUrl',
+        payload: currentUserDataFromDB?.imageUrl.imageUrl,
+      });
+      console.log('user data recieved from DB', currentUserDataFromDB);
+    }
+    setCurrentUserStore()
+  }, [currentUserID])
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setUserData(userData);
+        setCurrentUserID(currentUserID);
       } else {
-        setUserData(null);
+        setCurrentUserID(undefined);
         navigate('/login');
       }
     });
 
     return () => unsubscribe();
-  }, [userData]);
-
-  useEffect(() => {
-    const userFromStorage = sessionStorage.getItem('userUid');
-    if (userFromStorage) setUserData(userFromStorage);
-  }, []);
-
+  }, [currentUserID]);
+  
   return (
     <>
-      <UserContext.Provider value={{ userData, setUserData }}>
+      <UserContext.Provider value={{ currentUserID, setCurrentUserID }}>
         <UserStore.Provider value={{ userStore, dispatch }}>
           <Header />
           <Routes>

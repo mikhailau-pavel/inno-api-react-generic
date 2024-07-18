@@ -5,7 +5,7 @@ const writeUserData = (
   firstName: string | undefined,
   lastName: string | undefined,
   imageUrl: string | undefined,
-  userUid: string | null
+  userUid: string | undefined
 ) => {
   const db = getDatabase();
   if(firstName)
@@ -17,7 +17,7 @@ const writeUserData = (
 };
 
 const retrieveUserData = (
-  userUid: string | null
+  userUid: string | undefined
 ): Promise<GetProfileData | null> => {
   const dbRef = ref(getDatabase());
   return get(child(dbRef, 'users/' + `${userUid}/`)) 

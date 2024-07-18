@@ -10,7 +10,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
-  const { setUserData } = useContext(UserContext);
+  const { setCurrentUserID } = useContext(UserContext);
   const { dispatch } = useContext(UserStore);
   const navigate = useNavigate();
 
@@ -26,9 +26,9 @@ const LoginForm = () => {
         password
       );
       const user = userCredentials.user;
-      setUserData(user.uid || '');
-      if (user.uid) 
-        dispatch({type: 'setUserUid', payload: user.uid})
+      setCurrentUserID(user.uid || '');
+      console.log('user id received from login page', user.uid)
+      dispatch({type: 'setUserUid', payload: user.uid})
       navigate('/');
       sessionStorage.setItem('userUid', String(user.uid));
     } catch (error) {

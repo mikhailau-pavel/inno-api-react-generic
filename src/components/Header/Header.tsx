@@ -18,6 +18,7 @@ const Header = () => {
     <div className={styles.headerContainer}>
       <p className={styles.headerTitle}>Welcome to Pokémon Center</p>
       <NavBar />
+      
       <p className={styles.greetingMessage}>Hello {userName}</p>
       <div className={styles.profilePictureContainer}>
       <img
