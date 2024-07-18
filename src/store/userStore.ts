@@ -2,9 +2,9 @@ import { createContext } from "react";
 import { UserStoreContextProps, UserStoreProps } from "../types/types";
 
 const initialUserStateProps: UserStoreProps = {
-  userUid: null,
-  userName: null,
-  userPicUrl: null,
+  userUid: undefined,
+  userName: undefined,
+  userPicUrl: undefined,
 };
 
 const UserStore = createContext<UserStoreContextProps>({userStore: initialUserStateProps, dispatch: () => null})

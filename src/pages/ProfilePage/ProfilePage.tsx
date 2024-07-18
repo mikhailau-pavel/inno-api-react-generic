@@ -8,6 +8,7 @@ import {
 import { retrieveUserData, writeUserData } from '../../api/database';
 import { UserContext } from '../../store/store';
 import { GetProfileData } from '../../types/types';
+import UserStore from '../../store/userStore';
 
 const ProfilePage: React.FC = () => {
   const [firstName, setFirstName] = useState<string | undefined>('');
@@ -18,6 +19,7 @@ const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<GetProfileData | null>();
 
   const userUid = useContext(UserContext).userData;
+  const { dispatch } = useContext(UserStore)
 
   useEffect(() => {
     const setCurrentUserData = async () => {
@@ -35,6 +37,8 @@ const ProfilePage: React.FC = () => {
     try {
       const imageUrl = undefined
       writeUserData(firstName, lastName, imageUrl, userUid);
+     if (firstName)
+        dispatch({type: 'setUserName', payload: firstName})
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
@@ -61,6 +65,7 @@ const ProfilePage: React.FC = () => {
       console.log('response', response.data)
       const imageUrl: string | undefined = response.data.data.url;
       writeUserData(firstName, lastName, imageUrl, userUid);
+      dispatch({type: 'setUserPicUrl', payload: imageUrl})
     } catch (error) {
       setFormError(String(error));
       console.log('error', error);
@@ -95,9 +100,8 @@ const ProfilePage: React.FC = () => {
             </p>
             {userData && (
               <img
-              //swap source back after db
-                src={'../../assets/loader.gif'}
-                alt="Profile"
+                src={typeof userData.imageUrl !== "undefined" ? userData.imageUrl.imageUrl : undefined}
+                alt="Profile picture"
                 className={styles.profilePicture}
               />
             )}

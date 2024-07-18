@@ -1,4 +1,4 @@
-import { Dispatch, PropsWithChildren } from 'react';
+import { Dispatch, PropsWithChildren, Reducer, ReducerAction, ReducerState } from 'react';
 
 interface CardProps extends PropsWithChildren {
   pokemon: string;
@@ -20,9 +20,9 @@ interface ProfileData {
 }
 
 interface UserStoreProps {
-  userUid: string | null;
-  userName: string | null;
-  userPicUrl: string | null;
+  userUid: string | undefined;
+  userName: string | undefined;
+  userPicUrl: string | undefined;
 }
 
 interface UserContextProps {
@@ -56,7 +56,7 @@ type GetProfileData = {
 
 type UserStoreAction = {
   type: 'setUserUid' | 'setUserName' | 'setUserPicUrl';
-  payload: string | null;
+  payload: string | undefined;
 };
 
 type UserStoreReducerFunction = {

@@ -4,12 +4,14 @@ import auth from '../../firebase';
 import { UserContext } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';
+import UserStore from '../../store/userStore';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const { setUserData } = useContext(UserContext);
+  const { dispatch } = useContext(UserStore);
   const navigate = useNavigate();
 
   const onSubmit = async (
@@ -25,9 +27,10 @@ const LoginForm = () => {
       );
       const user = userCredentials.user;
       setUserData(user.uid || '');
+      if (user.uid) 
+        dispatch({type: 'setUserUid', payload: user.uid})
       navigate('/');
-      //to uid too
-      sessionStorage.setItem('userUid', String(user.uid))
+      sessionStorage.setItem('userUid', String(user.uid));
     } catch (error) {
       setFormError(String(error));
       console.log('error', error);
