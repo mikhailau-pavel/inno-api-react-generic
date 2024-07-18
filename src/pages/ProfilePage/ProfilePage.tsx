@@ -17,7 +17,7 @@ const ProfilePage: React.FC = () => {
   const [formData, setFormData] = useState({});
 
   const userUid = useContext(UserContext).currentUserID;
-  const { userStore, dispatch } = useContext(UserStore)
+  const { userStore } = useContext(UserStore)
 
   const handleNameFieldSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -26,8 +26,6 @@ const ProfilePage: React.FC = () => {
     try {
       const imageUrl = undefined
       writeUserData(firstName, lastName, imageUrl, userUid);
-     if (firstName)
-        dispatch({type: 'setUserName', payload: firstName})
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
@@ -54,7 +52,6 @@ const ProfilePage: React.FC = () => {
       console.log('response', response.data)
       const imageUrl: string | undefined = response.data.data.url;
       writeUserData(firstName, lastName, imageUrl, userUid);
-      dispatch({type: 'setUserPicUrl', payload: imageUrl})
     } catch (error) {
       setFormError(String(error));
       console.log('error', error);

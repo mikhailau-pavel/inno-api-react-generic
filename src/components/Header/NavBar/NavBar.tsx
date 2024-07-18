@@ -15,8 +15,8 @@ const NavBar: React.FC<NavBarProps> = () => {
     try {
       await auth.signOut();
       setCurrentUserID(undefined);
+      sessionStorage.removeItem('userUid');
       navigate('/');
-      sessionStorage.removeItem('user');
     } catch (error) {
       console.log('error: ', error);
     }

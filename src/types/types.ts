@@ -1,4 +1,4 @@
-import { Dispatch, PropsWithChildren, Reducer, ReducerAction, ReducerState } from 'react';
+import { Dispatch, PropsWithChildren } from 'react';
 
 
 interface CardProps extends PropsWithChildren {
@@ -11,7 +11,7 @@ interface PaginationProps extends PropsWithChildren {}
 interface NavBarProps extends PropsWithChildren {}
 
 interface ProtectedRouteProps extends PropsWithChildren {
-  authorizedUser: string | null;
+  authorizedUser: string | null | undefined;
 }
 
 interface ProfileData {
@@ -21,15 +21,15 @@ interface ProfileData {
 }
 
 interface UserStoreProps {
-  userUid: string | undefined;
-  userName: string | undefined;
-  userLastName: string | undefined;
-  userPicUrl: string | undefined;
+  userUid: string | null;
+  userName: string | null;
+  userLastName: string | null;
+  userPicUrl: string | null;
 }
 
 interface UserContextProps {
-  currentUserID: string | undefined;
-  setCurrentUserID: (email: string | undefined) => void;
+  currentUserID: string | null;
+  setCurrentUserID: (email: string | null) => void;
 }
 
 type Pokemon = {
@@ -38,27 +38,27 @@ type Pokemon = {
 };
 
 type SetProfileData = (
-  firstName: string | undefined,
-  lastName: string | undefined,
-  imageUrl: string | undefined,
+  firstName: string | null,
+  lastName: string | null,
+  imageUrl: string | null,
   userUid: string | null
 ) => void;
 
 type GetProfileData = {
   firstName: {
-    firstName: string;
+    firstName: string | null;
   };
   lastName: {
-    lastName: string;
+    lastName: string | null;
   };
   imageUrl: {
-    imageUrl: string;
+    imageUrl: string | null;
   };
 };
 
 type UserStoreAction = {
   type: 'setUserUid' | 'setUserName' | 'setUserPicUrl' | 'setUserLastName';
-  payload: string | undefined;
+  payload: string | null ;
 };
 
 type UserStoreReducerFunction = {

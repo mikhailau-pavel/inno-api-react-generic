@@ -2,10 +2,10 @@ import { child, get, getDatabase, ref, set } from "firebase/database";
 import { GetProfileData } from "../types/types";
 
 const writeUserData = (
-  firstName: string | undefined,
-  lastName: string | undefined,
-  imageUrl: string | undefined,
-  userUid: string | undefined
+  firstName: string | null,
+  lastName: string | null,
+  imageUrl: string | null,
+  userUid: string | null
 ) => {
   const db = getDatabase();
   if(firstName)
@@ -17,8 +17,8 @@ const writeUserData = (
 };
 
 const retrieveUserData = (
-  userUid: string | undefined
-): Promise<GetProfileData | null> => {
+  userUid: string | null
+): Promise<GetProfileData | null | undefined> => {
   const dbRef = ref(getDatabase());
   return get(child(dbRef, 'users/' + `${userUid}/`)) 
   .then((snapshot) => {

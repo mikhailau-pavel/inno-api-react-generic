@@ -15,26 +15,22 @@ import { UserStoreAction, UserStoreProps } from './types/types';
 import { retrieveUserData } from './api/database';
 
 function App() {
-  const [currentUserID, setCurrentUserID] = useState<string | undefined>(
-    undefined
-  );
+  const [currentUserID, setCurrentUserID] = useState<string | null>(() => {
+    const initialState = sessionStorage.getItem('userUid');
+    return initialState
+  });
   const navigate = useNavigate();
-  const authorizedUser = sessionStorage.getItem('userUid');
+  const userFromStorage = sessionStorage.getItem('userUid');
   const initialUserStateProps: UserStoreProps = {
-    userUid: undefined,
-    userName: undefined,
-    userLastName: undefined,
-    userPicUrl: undefined,
+    userUid: null,
+    userName: null,
+    userLastName: null,
+    userPicUrl: null,
   };
 
   const [userStore, dispatch] = useReducer<
     Reducer<UserStoreProps, UserStoreAction>
   >(userReducer, initialUserStateProps);
-
-  useEffect(() => {
-    const userFromStorage = sessionStorage.getItem('userUid');
-    if (userFromStorage) setCurrentUserID(userFromStorage);
-  }, []);
 
   useEffect(() => {
     const setCurrentUserStore = async () => {
@@ -43,7 +39,7 @@ function App() {
         type: 'setUserUid',
         payload: currentUserID,
       });
-      if (currentUserDataFromDB)
+      if (currentUserDataFromDB){
         dispatch({
           type: 'setUserName',
           payload: currentUserDataFromDB?.firstName.firstName,
@@ -55,7 +51,7 @@ function App() {
       dispatch({
         type: 'setUserPicUrl',
         payload: currentUserDataFromDB?.imageUrl.imageUrl,
-      });
+      });}
       console.log('user data recieved from DB', currentUserDataFromDB);
     };
     setCurrentUserStore();
@@ -66,7 +62,7 @@ function App() {
       if (user) {
         setCurrentUserID(currentUserID);
       } else {
-        setCurrentUserID(undefined);
+        setCurrentUserID(null);
         navigate('/login');
       }
     });
@@ -86,7 +82,7 @@ function App() {
             <Route
               path="profile"
               element={
-                <ProtectedRoute authorizedUser={authorizedUser}>
+                <ProtectedRoute authorizedUser={userFromStorage}>
                   <ProfilePage />
                 </ProtectedRoute>
               }
