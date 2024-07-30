@@ -4,7 +4,7 @@ import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Header from './components/Header/Header';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
-import { UserContext } from './store/store';
+import { UserContext } from './store/idStore';
 import { Reducer, useEffect, useReducer, useState } from 'react';
 import auth from './firebase';
 import ProfilePage from './pages/ProfilePage/ProfilePage';

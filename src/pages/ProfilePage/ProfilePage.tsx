@@ -6,7 +6,7 @@ import {
   IMGBB_UPLOAD_BASE_URL,
 } from '../../constants/constants';
 import { writeUserData } from '../../api/database';
-import { UserContext } from '../../store/store';
+import { UserContext } from '../../store/idStore';
 import UserStore from '../../store/userStore';
 
 const ProfilePage: React.FC = () => {
@@ -17,7 +17,7 @@ const ProfilePage: React.FC = () => {
   const [formData, setFormData] = useState({});
 
   const userUid = useContext(UserContext).currentUserID;
-  const { userStore } = useContext(UserStore)
+  const { userStore } = useContext(UserStore);
 
   const handleNameFieldSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -28,7 +28,7 @@ const ProfilePage: React.FC = () => {
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
-      throw error
+      throw error;
     }
   };
 
@@ -52,7 +52,7 @@ const ProfilePage: React.FC = () => {
       writeUserData(firstName, lastName, imageUrl, userUid);
     } catch (error) {
       setFormError(String(error));
-      throw new Error(`Error:${String(error)}`)
+      throw new Error(`Error:${String(error)}`);
     }
   };
 
@@ -75,14 +75,23 @@ const ProfilePage: React.FC = () => {
           <div className={styles.profileInfo}>
             <p>
               First Name:{' '}
-              {typeof userStore.userName != 'undefined' ? userStore.userName : 'Anonymous'}
+              {typeof userStore.userName != 'undefined'
+                ? userStore.userName
+                : 'Anonymous'}
             </p>
             <p>
-              Last Name: {typeof userStore.userLastName != 'undefined' ? userStore.userLastName : 'Anonymous'}
+              Last Name:{' '}
+              {typeof userStore.userLastName != 'undefined'
+                ? userStore.userLastName
+                : 'Anonymous'}
             </p>
             {userStore.userPicUrl && (
               <img
-                src={typeof userStore.userPicUrl !== "undefined" ? userStore.userPicUrl : undefined}
+                src={
+                  typeof userStore.userPicUrl !== 'undefined'
+                    ? userStore.userPicUrl
+                    : undefined
+                }
                 alt="Profile picture"
                 className={styles.profilePicture}
               />

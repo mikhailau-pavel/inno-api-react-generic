@@ -1,6 +1,21 @@
-import { createContext } from "react";
-import { UserContextProps } from "../types/types";
+import { createStore } from 'redux'
 
-const UserContext = createContext<UserContextProps>({currentUserID: '', setCurrentUserID: () => {}})
+function storeReducer(state = {
+  userUid: null,
+  userName: null,
+  userLastName: null,
+  userPicUrl: null,
+}, action) {
+  switch (action.type) {
+    case 'setUserId': 
+    //whole object reseted?
+    return { state: state.userUid = null }
+    default: 
+      return state;
+  }
+}
 
-export { UserContext }
+let store = createStore(storeReducer)
+
+store.subscribe(() => console.log(store.getState()))
+store.dispatch({type: })

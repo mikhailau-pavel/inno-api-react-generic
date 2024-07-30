@@ -1,7 +1,7 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useContext, useState } from 'react';
 import auth from '../../firebase';
-import { UserContext } from '../../store/store';
+import { UserContext } from '../../store/idStore';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';
 import UserStore from '../../store/userStore';
@@ -27,7 +27,7 @@ const LoginForm = () => {
       );
       const user = userCredentials.user;
       setCurrentUserID(user.uid || '');
-      dispatch({type: 'setUserUid', payload: user.uid})
+      dispatch({ type: 'setUserUid', payload: user.uid });
       navigate('/');
       sessionStorage.setItem('userUid', String(user.uid));
     } catch (error) {
