@@ -4,16 +4,21 @@ import { useContext } from 'react';
 import styles from './NavBar.module.css';
 import { UserContext } from '../../../store/idStore';
 import auth from '../../../firebase';
+import { useDispatch } from 'react-redux';
 
 const NavBar: React.FC<NavBarProps> = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const { currentUserID, setCurrentUserID } = useContext(UserContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignOut = async () => {
     await auth.signOut();
-    setCurrentUserID(null);
+    dispatch({
+      type: 'signOutClear',
+    });
+
     sessionStorage.removeItem('userUid');
     navigate('/');
   };

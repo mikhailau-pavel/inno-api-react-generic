@@ -57,7 +57,7 @@ type GetProfileData = {
 };
 
 type UserStoreAction = {
-  type: 'setUserUid' | 'setUserName' | 'setUserPicUrl' | 'setUserLastName';
+  type: 'setUserUid' | 'setUserName' | 'setUserPicUrl' | 'setUserLastName' | 'signOutClear';
   payload: string | null ;
 };
 
