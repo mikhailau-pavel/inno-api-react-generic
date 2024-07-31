@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './ProfilePage.module.css';
 import axios from 'axios';
 import {
@@ -6,9 +6,8 @@ import {
   IMGBB_UPLOAD_BASE_URL,
 } from '../../constants/constants';
 import { writeUserData } from '../../api/database';
-import { UserContext } from '../../store/idStore';
-import store from '../../store/store';
 import { UserStoreProps } from '../../types/types';
+import { useSelector } from 'react-redux';
 
 const ProfilePage: React.FC = () => {
   const [firstName, setFirstName] = useState<string | null>('');
@@ -16,20 +15,16 @@ const ProfilePage: React.FC = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const [image, setImage] = useState<Blob | null>(null);
   const [formData, setFormData] = useState({});
-  const [userStore, setUserStore] = useState<UserStoreProps>({});
-
-  store.subscribe(() => {
-    setUserStore(store.getState());
-    console.log('store in profile', store.getState());
+  const userStore = useSelector((state: UserStoreProps) => {
+    return state;
   });
-  useEffect(() => console.log('stated store', userStore), [userStore]);
 
   const handleNameFieldSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
     try {
-      writeUserData(firstName, lastName, null, userUid);
+      writeUserData(firstName, lastName, null, userStore.userUid);
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
@@ -84,17 +79,11 @@ const ProfilePage: React.FC = () => {
             </p>
             <p>
               Last Name:{' '}
-              {typeof userStore.userLastName != 'undefined'
-                ? userStore.userLastName
-                : 'Anonymous'}
+              {userStore.userLastName ? userStore.userLastName : 'Anonymous'}
             </p>
             {userStore.userPicUrl && (
               <img
-                src={
-                  typeof userStore.userPicUrl !== 'undefined'
-                    ? userStore.userPicUrl
-                    : undefined
-                }
+                src={userStore.userPicUrl ? userStore.userPicUrl : undefined}
                 alt="Profile picture"
                 className={styles.profilePicture}
               />

@@ -1,11 +1,12 @@
 import { legacy_createStore } from 'redux'
+import { UserStoreAction, UserStoreProps } from '../types/types';
 
-function storeReducer(state = {
+function storeReducer(state: UserStoreProps = {
   userUid: null,
   userName: null,
   userLastName: null,
   userPicUrl: null,
-}, action) {
+}, action: UserStoreAction) {
   switch (action.type) {
     case 'setUserUid':
       return { ...state, userUid: action.payload };
