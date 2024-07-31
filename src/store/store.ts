@@ -23,7 +23,5 @@ function storeReducer(state: UserStoreProps = {
 
 const store = legacy_createStore(storeReducer)
 
-store.subscribe(() => console.log('state inside',store.getState()))
-
 export default store;
 export { storeReducer }
