@@ -13,6 +13,8 @@ import UserStore from './store/userStore';
 import { userReducer } from './utils/utils';
 import { UserStoreAction, UserStoreProps } from './types/types';
 import { retrieveUserData } from './api/database';
+import { Provider } from 'react-redux'
+import store from './store/store';
 
 function App() {
   const [currentUserID, setCurrentUserID] = useState<string | null>(() => {
@@ -35,20 +37,21 @@ function App() {
   useEffect(() => {
     const setCurrentUserStore = async () => {
       const currentUserDataFromDB = await retrieveUserData(currentUserID);
-      dispatch({
-        type: 'setUserUid',
-        payload: currentUserID,
-      });
+
       if (currentUserDataFromDB) {
-        dispatch({
+        store.dispatch({
+          type: 'setUserUid',
+          payload: currentUserID,
+        });
+        store.dispatch({
           type: 'setUserName',
           payload: currentUserDataFromDB?.firstName.firstName,
         });
-        dispatch({
+        store.dispatch({
           type: 'setUserLastName',
           payload: currentUserDataFromDB?.lastName.lastName,
         });
-        dispatch({
+        store.dispatch({
           type: 'setUserPicUrl',
           payload: currentUserDataFromDB?.imageUrl.imageUrl,
         });
@@ -72,26 +75,28 @@ function App() {
 
   return (
     <>
-      <UserContext.Provider value={{ currentUserID, setCurrentUserID }}>
-        <UserStore.Provider value={{ userStore, dispatch }}>
-          <Header />
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<SignUpPage />} />
-            <Route
-              path="profile"
-              element={
-                <ProtectedRoute authorizedUser={userFromStorage}>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="*" element={<p>404 Page Not Found</p>} />
-          </Routes>
-        </UserStore.Provider>
-      </UserContext.Provider>
+      <Provider store={store}>
+        <UserContext.Provider value={{ currentUserID, setCurrentUserID }}>
+          <UserStore.Provider value={{ userStore, dispatch }}>
+            <Header />
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<SignUpPage />} />
+              <Route
+                path="profile"
+                element={
+                  <ProtectedRoute authorizedUser={userFromStorage}>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="*" element={<p>404 Page Not Found</p>} />
+            </Routes>
+          </UserStore.Provider>
+        </UserContext.Provider>
+      </Provider>
     </>
   );
 }

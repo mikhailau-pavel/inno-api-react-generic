@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from './ProfilePage.module.css';
 import axios from 'axios';
 import {
@@ -7,7 +7,8 @@ import {
 } from '../../constants/constants';
 import { writeUserData } from '../../api/database';
 import { UserContext } from '../../store/idStore';
-import UserStore from '../../store/userStore';
+import store from '../../store/store';
+import { UserStoreProps } from '../../types/types';
 
 const ProfilePage: React.FC = () => {
   const [firstName, setFirstName] = useState<string | null>('');
@@ -15,9 +16,13 @@ const ProfilePage: React.FC = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const [image, setImage] = useState<Blob | null>(null);
   const [formData, setFormData] = useState({});
+  const [userStore, setUserStore] = useState<UserStoreProps>({});
 
-  const userUid = useContext(UserContext).currentUserID;
-  const { userStore } = useContext(UserStore);
+  store.subscribe(() => {
+    setUserStore(store.getState());
+    console.log('store in profile', store.getState());
+  });
+  useEffect(() => console.log('stated store', userStore), [userStore]);
 
   const handleNameFieldSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -49,7 +54,7 @@ const ProfilePage: React.FC = () => {
         },
       });
       const imageUrl: string | null = response.data.data.url;
-      writeUserData(firstName, lastName, imageUrl, userUid);
+      writeUserData(firstName, lastName, imageUrl, userStore.userUid);
     } catch (error) {
       setFormError(String(error));
       throw new Error(`Error:${String(error)}`);
@@ -75,9 +80,7 @@ const ProfilePage: React.FC = () => {
           <div className={styles.profileInfo}>
             <p>
               First Name:{' '}
-              {typeof userStore.userName != 'undefined'
-                ? userStore.userName
-                : 'Anonymous'}
+              {userStore.userName ? userStore.userName : 'Anonymous'}
             </p>
             <p>
               Last Name:{' '}

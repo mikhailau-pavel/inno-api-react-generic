@@ -1,11 +1,17 @@
-import { useContext } from 'react';
+import { useEffect, useState } from 'react';
 import NavBar from './NavBar/NavBar';
 import styles from './Header.module.css';
-import UserStore from '../../store/userStore';
 import { NavLink } from 'react-router-dom';
+import store from '../../store/store';
+import { UserStoreProps } from '../../types/types';
 
 const Header = () => {
-  const { userStore } = useContext(UserStore);
+  const [userStore, setUserStore] = useState<UserStoreProps>({});
+  store.subscribe(() => {
+    setUserStore(store.getState());
+    //console.log('store in header3', store.getState());
+  });
+  useEffect(() => console.log('stated store', userStore), [userStore]);
 
   return (
     <div className={styles.headerContainer}>
