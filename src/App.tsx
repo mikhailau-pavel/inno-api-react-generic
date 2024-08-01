@@ -11,31 +11,24 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { retrieveUserData } from './api/database';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserStoreProps } from './types/types';
+import { setUserLastName, setUserName, setUserPicUrl, setUserUid } from './store/actionControls';
 
 function App() {
   const currentUserAuth = useSelector((state: UserStoreProps) => state.userUid);
   const dispatch = useDispatch();
+  /*const setUserUid = () => ({
+    type: 'setUserUid',
+    payload: currentUserAuth,})*/
+
 
   useEffect(() => {
     const setCurrentUserStore = async () => {
       const currentUserDataFromDB = await retrieveUserData(currentUserAuth);
-      dispatch({
-        type: 'setUserUid',
-        payload: currentUserAuth,
-      });
       if (currentUserDataFromDB) {
-        dispatch({
-          type: 'setUserName',
-          payload: currentUserDataFromDB?.firstName.firstName,
-        });
-        dispatch({
-          type: 'setUserLastName',
-          payload: currentUserDataFromDB?.lastName.lastName,
-        });
-        dispatch({
-          type: 'setUserPicUrl',
-          payload: currentUserDataFromDB?.imageUrl.imageUrl,
-        });
+        dispatch(setUserUid(currentUserDataFromDB));
+        dispatch(setUserName(currentUserDataFromDB));
+        dispatch(setUserLastName(currentUserDataFromDB));
+        dispatch(setUserPicUrl(currentUserDataFromDB));
       }
     };
     setCurrentUserStore();
