@@ -10,7 +10,7 @@ import { sortByIdDescend, sortByName } from '../../utils/utils';
 const Pagination: React.FC<PaginationProps> = () => {
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [sortedPokemonList, setSortedPokemonList] = useState<Pokemon[]>([]);
-  const [sortingStrategy, setSortingStrategy] = useState('none');
+  const [sortingStrategyType, setSortingStrategyType] = useState('none');
   const [isLoading, setIsLoading] = useState(false);
   const [index, setIndex] = useState(2);
 
@@ -52,22 +52,19 @@ const Pagination: React.FC<PaginationProps> = () => {
   }, [fetchData]);
 
   useEffect(() => {
-    setSortedPokemonList(sorting(sortingStrategy, pokemonList));
-    console.log('sorted pokemon list', sortedPokemonList);
-  }, [fetchData, pokemonList, sortedPokemonList, sortingStrategy]);
+    setSortedPokemonList(sorting(sortingStrategyType, pokemonList));
+  }, [fetchData, pokemonList, sortingStrategyType]);
 
-  const sorting = (sortingStrategy: string, pokemonList: Pokemon[]) => {
-    return sortingStrategy === 'name'
+  const sorting = (sortingStrategyType: string, pokemonList: Pokemon[]) => {
+    return sortingStrategyType === 'name'
       ? sortByName(pokemonList)
-      : sortingStrategy === 'id'
+      : sortingStrategyType === 'id'
         ? sortByIdDescend(pokemonList)
         : pokemonList;
-  };
-
-  //interface for sort strategy
+  }
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSortingStrategy(e.target.value);
+    setSortingStrategyType(e.target.value);
   };
 
   return (
@@ -75,6 +72,9 @@ const Pagination: React.FC<PaginationProps> = () => {
       <div className={styles.mainFlow}>
         <label htmlFor="strategy">Sort by: </label>
         <select name="strategy" id="filter" onChange={handleSelectChange}>
+          <option value="none" selected>
+            Ascending ID
+          </option>
           <option value="name">Name</option>
           <option value="id">Descending ID</option>
         </select>

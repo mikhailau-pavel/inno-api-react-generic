@@ -1,4 +1,4 @@
-import { Pokemon, UserStoreAction, UserStoreProps } from '../types/types';
+import { Pokemon, SortingStrategy, UserStoreAction, UserStoreProps } from '../types/types';
 
 const userReducer = (state: UserStoreProps, action: UserStoreAction) => {
   switch (action.type) {
@@ -15,7 +15,7 @@ const userReducer = (state: UserStoreProps, action: UserStoreAction) => {
   }
 };
 
-const sortByName = (pokemonList: Pokemon[]) => {
+const sortByName: SortingStrategy = (pokemonList) => {
   return pokemonList.toSorted((a, b) => {
     if (a.name < b.name) {
       return -1;
@@ -27,7 +27,7 @@ const sortByName = (pokemonList: Pokemon[]) => {
   });
 };
 
-const sortByIdDescend = (pokemonList: Pokemon[]) => {
+const sortByIdDescend: SortingStrategy = (pokemonList: Pokemon[]) => {
   return pokemonList.toSorted(
     (a, b) => Number(b.url.slice(34, -1)) - Number(a.url.slice(34, -1))
   );

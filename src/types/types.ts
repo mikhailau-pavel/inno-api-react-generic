@@ -32,6 +32,10 @@ interface UserContextProps {
   setCurrentUserID: (email: string | null) => void;
 }
 
+interface SortingStrategy {
+  (pokemonList: Pokemon[]): Pokemon[]
+}
+
 type Pokemon = {
   name: string;
   url: string;
@@ -83,5 +87,6 @@ export type {
   GetProfileData,
   UserStoreAction,
   UserStoreReducerFunction,
-  UserStoreContextProps
+  UserStoreContextProps,
+  SortingStrategy
 };
