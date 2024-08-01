@@ -4,34 +4,21 @@ import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Header from './components/Header/Header';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
-import { UserContext } from './store/idStore';
-import { Reducer, useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import auth from './firebase';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
-import UserStore from './store/userStore';
-import { userReducer } from './utils/utils';
-import { UserStoreAction, UserStoreProps } from './types/types';
 import { retrieveUserData } from './api/database';
-import { Provider } from 'react-redux'
+import { useSelector } from 'react-redux';
 import store from './store/store';
+import { UserStoreProps } from './types/types';
 
 function App() {
   const [currentUserID, setCurrentUserID] = useState<string | null>(() => {
     const initialState = sessionStorage.getItem('userUid');
     return initialState;
   });
-  const userFromStorage = sessionStorage.getItem('userUid');
-  const initialUserStateProps: UserStoreProps = {
-    userUid: null,
-    userName: null,
-    userLastName: null,
-    userPicUrl: null,
-  };
-
-  const [userStore, dispatch] = useReducer<
-    Reducer<UserStoreProps, UserStoreAction>
-  >(userReducer, initialUserStateProps);
+  const currentUserAuth = useSelector((state: UserStoreProps) => state.userUid);
 
   useEffect(() => {
     const setCurrentUserStore = async () => {
@@ -76,28 +63,22 @@ function App() {
 
   return (
     <>
-      <Provider store={store}>
-        <UserContext.Provider value={{ currentUserID, setCurrentUserID }}>
-          <UserStore.Provider value={{ userStore, dispatch }}>
-            <Header />
-            <Routes>
-              <Route path="/" element={<MainPage />} />
-              <Route path="login" element={<LoginPage />} />
-              <Route path="register" element={<SignUpPage />} />
-              <Route
-                path="profile"
-                element={
-                  <ProtectedRoute authorizedUser={userFromStorage}>
-                    <ProfilePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="*" element={<p>404 Page Not Found</p>} />
-            </Routes>
-          </UserStore.Provider>
-        </UserContext.Provider>
-      </Provider>
+      <Header />
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<SignUpPage />} />
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute authorizedUser={currentUserAuth}>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="*" element={<p>404 Page Not Found</p>} />
+      </Routes>
     </>
   );
 }
