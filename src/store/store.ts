@@ -20,7 +20,11 @@ function storeReducer(state: UserStoreProps = initialStore, action: UserStoreAct
     case 'setUserPicUrl':
       return { ...state, userPicUrl: action.payload };
     case 'signOutClear': 
-      return { ...state, initialStore}
+      return { ...state,  userUid: null,
+        userName: null,
+        userLastName: null,
+        userPicUrl: null,
+      }
     default:
       return state;
   }

@@ -1,15 +1,16 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { NavBarProps } from '../../../types/types';
-import { useContext } from 'react';
+import { NavBarProps, UserStoreProps } from '../../../types/types';
 import styles from './NavBar.module.css';
-import { UserContext } from '../../../store/idStore';
 import auth from '../../../firebase';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const NavBar: React.FC<NavBarProps> = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const { currentUserID, setCurrentUserID } = useContext(UserContext);
+  const currentUserID = useSelector((state: UserStoreProps) => {
+    return state.userUid
+  })
+  const tempState = useSelector((state: UserStoreProps) => {return state})
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -18,6 +19,7 @@ const NavBar: React.FC<NavBarProps> = () => {
     dispatch({
       type: 'signOutClear',
     });
+    await console.log(tempState)
 
     sessionStorage.removeItem('userUid');
     navigate('/');
