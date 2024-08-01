@@ -83,5 +83,5 @@ export type {
   GetProfileData,
   UserStoreAction,
   UserStoreReducerFunction,
-  UserStoreContextProps,
+  UserStoreContextProps
 };

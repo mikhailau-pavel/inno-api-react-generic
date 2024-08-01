@@ -10,7 +10,6 @@ const NavBar: React.FC<NavBarProps> = () => {
   const currentUserID = useSelector((state: UserStoreProps) => {
     return state.userUid
   })
-  const tempState = useSelector((state: UserStoreProps) => {return state})
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -19,7 +18,6 @@ const NavBar: React.FC<NavBarProps> = () => {
     dispatch({
       type: 'signOutClear',
     });
-    await console.log(tempState)
 
     sessionStorage.removeItem('userUid');
     navigate('/');
