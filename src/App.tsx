@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/LoginPage/LoginPage';
@@ -21,7 +21,6 @@ function App() {
     const initialState = sessionStorage.getItem('userUid');
     return initialState;
   });
-  const navigate = useNavigate();
   const userFromStorage = sessionStorage.getItem('userUid');
   const initialUserStateProps: UserStoreProps = {
     userUid: null,
@@ -37,7 +36,10 @@ function App() {
   useEffect(() => {
     const setCurrentUserStore = async () => {
       const currentUserDataFromDB = await retrieveUserData(currentUserID);
-
+      store.dispatch({
+        type: 'setUserUid',
+        payload: currentUserID,
+      });
       if (currentUserDataFromDB) {
         store.dispatch({
           type: 'setUserUid',
@@ -70,7 +72,7 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [currentUserID, navigate]);
+  }, [currentUserID]);
 
   return (
     <>
