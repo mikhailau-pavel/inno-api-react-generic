@@ -4,35 +4,26 @@ import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Header from './components/Header/Header';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import auth from './firebase';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { retrieveUserData } from './api/database';
 import { useDispatch, useSelector } from 'react-redux';
-import store from './store/store';
 import { UserStoreProps } from './types/types';
 
 function App() {
-  const [currentUserID, setCurrentUserID] = useState<string | null>(() => {
-    const initialState = sessionStorage.getItem('userUid');
-    return initialState;
-  });
   const currentUserAuth = useSelector((state: UserStoreProps) => state.userUid);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const setCurrentUserStore = async () => {
-      const currentUserDataFromDB = await retrieveUserData(currentUserID);
-      store.dispatch({
+      const currentUserDataFromDB = await retrieveUserData(currentUserAuth);
+      dispatch({
         type: 'setUserUid',
-        payload: currentUserID,
+        payload: currentUserAuth,
       });
       if (currentUserDataFromDB) {
-        dispatch({
-          type: 'setUserUid',
-          payload: currentUserID,
-        });
         dispatch({
           type: 'setUserName',
           payload: currentUserDataFromDB?.firstName.firstName,
@@ -48,19 +39,25 @@ function App() {
       }
     };
     setCurrentUserStore();
-  }, [currentUserID, dispatch]);
+  }, [currentUserAuth, dispatch]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setCurrentUserID(currentUserID);
+        dispatch({
+          type: 'setUserUid',
+          payload: currentUserAuth,
+        });
       } else {
-        setCurrentUserID(null);
+        dispatch({
+          type: 'setUserUid',
+          payload: null,
+        });
       }
     });
 
     return () => unsubscribe();
-  }, [currentUserID]);
+  }, [currentUserAuth, dispatch]);
 
   return (
     <>

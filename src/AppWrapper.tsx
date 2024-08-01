@@ -4,11 +4,9 @@ import store from './store/store';
 
 const AppWrapper = () => {
   return (
-    <>
       <Provider store={store}>
         <App />
       </Provider>
-    </>
   );
 };
 
