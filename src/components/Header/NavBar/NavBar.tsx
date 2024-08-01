@@ -8,26 +8,22 @@ import auth from '../../../firebase';
 const NavBar: React.FC<NavBarProps> = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const { userData, setUserData } = useContext(UserContext);
+  const { currentUserID, setCurrentUserID } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    try {
       await auth.signOut();
-      setUserData(null);
+      setCurrentUserID(null);
+      sessionStorage.removeItem('userUid');
       navigate('/');
-      sessionStorage.removeItem('user');
-    } catch (error) {
-      console.log('error: ', error);
-    }
   };
 
   return (
     <div className={styles.navBarContainer}>
-      {isHomePage && !userData && <NavLink to="/register">Sign Up</NavLink>}
-      {isHomePage && !userData && <NavLink to="/login">Login</NavLink>}
+      {isHomePage && !currentUserID && <NavLink to="/register">Sign Up</NavLink>}
+      {isHomePage && !currentUserID && <NavLink to="/login">Login</NavLink>}
       {!isHomePage && <NavLink to="/">Home</NavLink>}
-      {userData && <button onClick={handleSignOut}>Sign Out</button>}
+      {currentUserID && <button onClick={handleSignOut}>Sign Out</button>}
     </div>
   );
 };
