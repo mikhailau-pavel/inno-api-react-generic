@@ -66,7 +66,6 @@ function App() {
         setCurrentUserID(currentUserID);
       } else {
         setCurrentUserID(null);
-        navigate('/login');
       }
     });
 
