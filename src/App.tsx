@@ -9,7 +9,7 @@ import auth from './firebase';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { retrieveUserData } from './api/database';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import store from './store/store';
 import { UserStoreProps } from './types/types';
 
@@ -19,6 +19,7 @@ function App() {
     return initialState;
   });
   const currentUserAuth = useSelector((state: UserStoreProps) => state.userUid);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const setCurrentUserStore = async () => {
@@ -28,26 +29,26 @@ function App() {
         payload: currentUserID,
       });
       if (currentUserDataFromDB) {
-        store.dispatch({
+        dispatch({
           type: 'setUserUid',
           payload: currentUserID,
         });
-        store.dispatch({
+        dispatch({
           type: 'setUserName',
           payload: currentUserDataFromDB?.firstName.firstName,
         });
-        store.dispatch({
+        dispatch({
           type: 'setUserLastName',
           payload: currentUserDataFromDB?.lastName.lastName,
         });
-        store.dispatch({
+        dispatch({
           type: 'setUserPicUrl',
           payload: currentUserDataFromDB?.imageUrl.imageUrl,
         });
       }
     };
     setCurrentUserStore();
-  }, [currentUserID]);
+  }, [currentUserID, dispatch]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
