@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styles from './ProfilePage.module.css';
 import axios from 'axios';
 import {
-  IMAGE_UPLOAD_API_KEY,
   IMGBB_UPLOAD_BASE_URL,
 } from '../../constants/constants';
 import { writeUserData } from '../../api/database';
@@ -45,7 +44,7 @@ const ProfilePage: React.FC = () => {
     try {
       const response = await axios.post(IMGBB_UPLOAD_BASE_URL, formData, {
         params: {
-          key: IMAGE_UPLOAD_API_KEY,
+          key: process.env.IMAGE_UPLOAD_API_KEY
         },
       });
       const imageUrl: string | null = response.data.data.url;

@@ -55,13 +55,15 @@ const Pagination: React.FC<PaginationProps> = () => {
     setSortedPokemonList(sorting(sortingStrategyType, pokemonList));
   }, [fetchData, pokemonList, sortingStrategyType]);
 
-  const sorting = (sortingStrategyType: string, pokemonList: Pokemon[]) => {
-    return sortingStrategyType === 'name'
-      ? sortByName(pokemonList)
-      : sortingStrategyType === 'id'
-        ? sortByIdDescend(pokemonList)
-        : pokemonList;
-  }
+  const sorting = (sortingStrategyType: string, pokemonList: Pokemon[]): Pokemon[] => {
+    switch(sortingStrategyType) {
+    case 'name': 
+      return sortByName(pokemonList)
+    case 'id': 
+      return sortByIdDescend(pokemonList)
+    default: 
+      return pokemonList
+  }}
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortingStrategyType(e.target.value);
