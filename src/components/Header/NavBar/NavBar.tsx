@@ -3,6 +3,7 @@ import { NavBarProps, UserStoreProps } from '../../../types/types';
 import styles from './NavBar.module.css';
 import auth from '../../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
+import { signOutClear } from '../../../store/actionControls';
 
 const NavBar: React.FC<NavBarProps> = () => {
   const location = useLocation();
@@ -15,9 +16,7 @@ const NavBar: React.FC<NavBarProps> = () => {
 
   const handleSignOut = async () => {
     await auth.signOut();
-    dispatch({
-      type: 'signOutClear',
-    });
+    dispatch(signOutClear());
 
     sessionStorage.removeItem('userUid');
     navigate('/');

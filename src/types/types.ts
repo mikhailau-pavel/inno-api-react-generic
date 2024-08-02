@@ -61,7 +61,7 @@ type GetProfileData = {
 };
 
 type UserStoreAction = {
-  type: 'setUserUid' | 'setUserName' | 'setUserPicUrl' | 'setUserLastName' | 'signOutClear';
+  type: 'SET_USER_ID' | 'SET_FIRST_NAME' | 'SET_LAST_NAME' | 'SET_USER_PIC_URL' | 'SIGN_OUT_CLEAR';
   payload: string | null ;
 };
 
@@ -88,5 +88,5 @@ export type {
   UserStoreAction,
   UserStoreReducerFunction,
   UserStoreContextProps,
-  SortingStrategy
+  SortingStrategy,
 };

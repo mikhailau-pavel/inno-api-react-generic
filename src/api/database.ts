@@ -34,4 +34,6 @@ const retrieveUserData = (
   });
 } 
 
+export type UserData = Awaited<ReturnType<typeof retrieveUserData>>
+
 export { writeUserData, retrieveUserData }

@@ -24,7 +24,7 @@ const LoginForm = () => {
         password
       );
       const user = userCredentials.user;
-      dispatch({ type: 'setUserUid', payload: user.uid });
+      dispatch({ type: 'SET_USER_ID', payload: user.uid });
       navigate('/');
       sessionStorage.setItem('userUid', String(user.uid));
     } catch (error) {

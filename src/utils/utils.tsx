@@ -1,19 +1,4 @@
-import { Pokemon, SortingStrategy, UserStoreAction, UserStoreProps } from '../types/types';
-
-const userReducer = (state: UserStoreProps, action: UserStoreAction) => {
-  switch (action.type) {
-    case 'setUserUid':
-      return { ...state, userUid: action.payload };
-    case 'setUserName':
-      return { ...state, userName: action.payload };
-    case 'setUserLastName':
-      return { ...state, userLastName: action.payload };
-    case 'setUserPicUrl':
-      return { ...state, userPicUrl: action.payload };
-    default:
-      return state;
-  }
-};
+import { Pokemon, SortingStrategy } from '../types/types';
 
 const sortByName: SortingStrategy = (pokemonList) => {
   return pokemonList.toSorted((a, b) => {
@@ -33,4 +18,4 @@ const sortByIdDescend: SortingStrategy = (pokemonList: Pokemon[]) => {
   );
 };
 
-export { userReducer, sortByName, sortByIdDescend };
+export { sortByName, sortByIdDescend };

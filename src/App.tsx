@@ -11,21 +11,24 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { retrieveUserData } from './api/database';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserStoreProps } from './types/types';
-import { setUserLastName, setUserName, setUserPicUrl, setUserUid } from './store/actionControls';
+import {
+  setUserLastName,
+  setUserName,
+  setUserPicUrl,
+  setUserUid,
+} from './store/actionControls';
 
 function App() {
   const currentUserAuth = useSelector((state: UserStoreProps) => state.userUid);
   const dispatch = useDispatch();
-  /*const setUserUid = () => ({
-    type: 'setUserUid',
-    payload: currentUserAuth,})*/
-
+  const currentUserID = sessionStorage.getItem('userUid');
+  dispatch(setUserUid(currentUserID))
 
   useEffect(() => {
     const setCurrentUserStore = async () => {
       const currentUserDataFromDB = await retrieveUserData(currentUserAuth);
+      dispatch(setUserUid(currentUserAuth));
       if (currentUserDataFromDB) {
-        dispatch(setUserUid(currentUserDataFromDB));
         dispatch(setUserName(currentUserDataFromDB));
         dispatch(setUserLastName(currentUserDataFromDB));
         dispatch(setUserPicUrl(currentUserDataFromDB));
@@ -38,12 +41,12 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         dispatch({
-          type: 'setUserUid',
+          type: 'SET_USER_ID',
           payload: currentUserAuth,
         });
       } else {
         dispatch({
-          type: 'setUserUid',
+          type: 'SET_USER_ID',
           payload: null,
         });
       }
@@ -62,7 +65,7 @@ function App() {
         <Route
           path="profile"
           element={
-            <ProtectedRoute authorizedUser={currentUserAuth}>
+            <ProtectedRoute authorizedUser={currentUserID}>
               <ProfilePage />
             </ProtectedRoute>
           }

@@ -8,24 +8,17 @@ const initialStore = {
     userPicUrl: null,
   }
 
-/*const setUserUid = () => ({
-  type: 'setUserUid',
-  payload: currentUserAuth,})
-const setUserName = () => {}
-const setUserLastName = () => {}
-const setUserPicUrl = () => {}
-const signOutClear = () => {}*/
 function storeReducer(state: UserStoreProps = initialStore, action: UserStoreAction) {
   switch (action.type) {
-    case 'setUserUid':
+    case 'SET_USER_ID':
       return { ...state, userUid: action.payload };
-    case 'setUserName':
+    case 'SET_FIRST_NAME':
       return { ...state, userName: action.payload };
-    case 'setUserLastName':
+    case 'SET_LAST_NAME':
       return { ...state, userLastName: action.payload };
-    case 'setUserPicUrl':
+    case 'SET_USER_PIC_URL':
       return { ...state, userPicUrl: action.payload };
-    case 'signOutClear': 
+    case 'SIGN_OUT_CLEAR': 
       return { ...state,  userUid: null,
         userName: null,
         userLastName: null,
@@ -40,4 +33,3 @@ const store = legacy_createStore(storeReducer)
 
 export default store;
 export { storeReducer }
-//, setUserUid, setUserName, setUserLastName, setUserPicUrl, signOutClear
