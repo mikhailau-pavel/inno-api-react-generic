@@ -1,13 +1,12 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import styles from './ProfilePage.module.css';
 import axios from 'axios';
 import {
-  IMAGE_UPLOAD_API_KEY,
   IMGBB_UPLOAD_BASE_URL,
 } from '../../constants/constants';
 import { writeUserData } from '../../api/database';
-import { UserContext } from '../../store/store';
-import UserStore from '../../store/userStore';
+import { UserStoreProps } from '../../types/types';
+import { useSelector } from 'react-redux';
 
 const ProfilePage: React.FC = () => {
   const [firstName, setFirstName] = useState<string | null>('');
@@ -15,20 +14,20 @@ const ProfilePage: React.FC = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const [image, setImage] = useState<Blob | null>(null);
   const [formData, setFormData] = useState({});
-
-  const userUid = useContext(UserContext).currentUserID;
-  const { userStore } = useContext(UserStore)
+  const userStore = useSelector((state: UserStoreProps) => {
+    return state;
+  });
 
   const handleNameFieldSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
     try {
-      writeUserData(firstName, lastName, null, userUid);
+      writeUserData(firstName, lastName, null, userStore.userUid);
       setFormError(null);
     } catch (error) {
       setFormError(String(error));
-      throw error
+      throw error;
     }
   };
 
@@ -45,14 +44,14 @@ const ProfilePage: React.FC = () => {
     try {
       const response = await axios.post(IMGBB_UPLOAD_BASE_URL, formData, {
         params: {
-          key: IMAGE_UPLOAD_API_KEY,
+          key: process.env.IMAGE_UPLOAD_API_KEY
         },
       });
       const imageUrl: string | null = response.data.data.url;
-      writeUserData(firstName, lastName, imageUrl, userUid);
+      writeUserData(firstName, lastName, imageUrl, userStore.userUid);
     } catch (error) {
       setFormError(String(error));
-      throw new Error(`Error:${String(error)}`)
+      throw new Error(`Error:${String(error)}`);
     }
   };
 
@@ -75,14 +74,15 @@ const ProfilePage: React.FC = () => {
           <div className={styles.profileInfo}>
             <p>
               First Name:{' '}
-              {typeof userStore.userName != 'undefined' ? userStore.userName : 'Anonymous'}
+              {userStore.userName ? userStore.userName : 'Anonymous'}
             </p>
             <p>
-              Last Name: {typeof userStore.userLastName != 'undefined' ? userStore.userLastName : 'Anonymous'}
+              Last Name:{' '}
+              {userStore.userLastName ? userStore.userLastName : 'Anonymous'}
             </p>
             {userStore.userPicUrl && (
               <img
-                src={typeof userStore.userPicUrl !== "undefined" ? userStore.userPicUrl : undefined}
+                src={userStore.userPicUrl ? userStore.userPicUrl : undefined}
                 alt="Profile picture"
                 className={styles.profilePicture}
               />

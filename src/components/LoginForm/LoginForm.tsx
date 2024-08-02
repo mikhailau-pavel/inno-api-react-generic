@@ -1,18 +1,16 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import auth from '../../firebase';
-import { UserContext } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';
-import UserStore from '../../store/userStore';
+import { useDispatch } from 'react-redux';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
-  const { setCurrentUserID } = useContext(UserContext);
-  const { dispatch } = useContext(UserStore);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -26,8 +24,7 @@ const LoginForm = () => {
         password
       );
       const user = userCredentials.user;
-      setCurrentUserID(user.uid || '');
-      dispatch({type: 'setUserUid', payload: user.uid})
+      dispatch({ type: 'SET_USER_ID', payload: user.uid });
       navigate('/');
       sessionStorage.setItem('userUid', String(user.uid));
     } catch (error) {

@@ -1,11 +1,13 @@
-import { useContext } from 'react';
 import NavBar from './NavBar/NavBar';
 import styles from './Header.module.css';
-import UserStore from '../../store/userStore';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { UserStoreProps } from '../../types/types';
 
 const Header = () => {
-  const { userStore } = useContext(UserStore);
+  const userStore = useSelector((state: UserStoreProps) => {
+    return state
+  })
 
   return (
     <div className={styles.headerContainer}>
